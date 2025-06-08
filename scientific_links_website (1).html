@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مرجع المهندس - منصة المراجع الهندسية الشاملة</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=DIN+Next:wght@300;400;500;600;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-gradient: linear-gradient(135deg, #1e3c72 0%, #2a5298 50%, #4facfe 100%);
+            --secondary-gradient: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1, #96ceb4);
+            --glass-bg: rgba(255, 255, 255, 0.1);
+            --glass-border: rgba(255, 255, 255, 0.2);
+            --text-primary: #2d3748;
+            --text-secondary: #718096;
+            --accent-color: #2a5298;
+            --engineering-blue: #1e3c72;
+            --engineering-gold: #ffd700;
+        }
+
+        body {
+            font-family: 'DIN Next', 'Segoe UI', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--primary-gradient);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+            min-height: 100vh;
+            color: #333;
+            overflow-x: hidden;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .floating-particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.6);
+            border-radius: 50%;
+            animation: float 20s infinite linear;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-100px) rotate(360deg); opacity: 0; }
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .navbar {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border-radius: 50px;
+            padding: 15px 30px;
+            border: 1px solid var(--glass-border);
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+
+        .navbar:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 25px;
+            align-items: center;
+        }
+
+        .nav-link {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 8px 16px;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        header {
+            text-align: center;
+            margin: 120px 0 60px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border-radius: 30px;
+            padding: 50px;
+            border: 1px solid var(--glass-border);
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(from 0deg, transparent, rgba(255,255,255,0.1), transparent);
+            animation: rotate 20s linear infinite;
+        }
+
+        @keyframes rotate {
+            100% { transform: rotate(360deg); }
+        }
+
+        .header-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        h1 {
+            color: white;
+            font-size: 3.5rem;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 20px rgba(0,0,0,0.5);
+            background: linear-gradient(45deg, #fff, #ffd700, #e6f3ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-weight: 700;
+        }
+
+        .subtitle {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1.4rem;
+            font-weight: 300;
+            margin-bottom: 30px;
+        }
+
+        .quick-stats {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 30px;
+        }
+
+        .quick-stat {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px 25px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 215, 0, 0.3);
+        }
+
+        .search-section {
+            margin: 40px 0;
+            text-align: center;
+        }
+
+        .search-container {
+            position: relative;
+            display: inline-block;
+            margin-bottom: 30px;
+        }
+
+        .search-input {
+            padding: 20px 60px 20px 25px;
+            font-size: 18px;
+            border: none;
+            border-radius: 50px;
+            width: 400px;
+            max-width: 90%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            outline: none;
+            transition: all 0.4s ease;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            font-family: 'DIN Next', sans-serif;
+        }
+
+        .search-input:focus {
+            transform: scale(1.05);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+        }
+
+        .search-btn {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: var(--engineering-blue);
+            color: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .search-btn:hover {
+            background: var(--accent-color);
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .filter-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 30px 0;
+            flex-wrap: wrap;
+        }
+
+        .filter-tab {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            font-family: 'DIN Next', sans-serif;
+            font-weight: 500;
+        }
+
+        .filter-tab:hover,
+        .filter-tab.active {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            border-color: var(--engineering-gold);
+        }
+
+        .stats-dashboard {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 25px;
+            margin: 50px 0;
+        }
+
+        .stat-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            border: 1px solid var(--glass-border);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+            transition: all 0.6s ease;
+        }
+
+        .stat-card:hover::before {
+            left: 100%;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: white;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .stat-label {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1rem;
+            font-weight: 400;
+        }
+
+        .categories {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+            gap: 30px;
+            margin-top: 50px;
+        }
+
+        .category {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 25px;
+            padding: 35px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .category::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--secondary-gradient);
+            background-size: 300% 300%;
+            animation: gradientShift 8s ease infinite;
+        }
+
+        .category:hover {
+            transform: translateY(-15px);
+            box-shadow: 0 30px 80px rgba(0,0,0,0.2);
+        }
+
+        .category h2 {
+            color: var(--engineering-blue);
+            font-size: 1.8rem;
+            margin-bottom: 25px;
+            text-align: center;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #e2e8f0;
+            position: relative;
+            font-weight: 600;
+        }
+
+        .category h2::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 50px;
+            height: 2px;
+            background: var(--engineering-gold);
+        }
+
+        .links {
+            list-style: none;
+        }
+
+        .link-item {
+            margin-bottom: 20px;
+            padding: 20px;
+            background: linear-gradient(135deg, rgba(30, 60, 114, 0.05), rgba(30, 60, 114, 0.1));
+            border-radius: 15px;
+            transition: all 0.4s ease;
+            border-left: 4px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .link-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0;
+            height: 100%;
+            background: linear-gradient(90deg, rgba(30, 60, 114, 0.1), rgba(30, 60, 114, 0.2));
+            transition: width 0.4s ease;
+        }
+
+        .link-item:hover::before {
+            width: 100%;
+        }
+
+        .link-item:hover {
+            background: rgba(30, 60, 114, 0.1);
+            border-left-color: var(--engineering-gold);
+            transform: translateX(10px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .link-item a {
+            text-decoration: none;
+            color: var(--engineering-blue);
+            font-weight: 600;
+            font-size: 1.2rem;
+            display: block;
+            margin-bottom: 8px;
+            position: relative;
+            z-index: 2;
+            transition: color 0.3s ease;
+        }
+
+        .link-item a:hover {
+            color: var(--accent-color);
+        }
+
+        .link-description {
+            color: var(--text-secondary);
+            font-size: 1rem;
+            line-height: 1.6;
+            position: relative;
+            z-index: 2;
+            font-weight: 400;
+        }
+
+        .link-tags {
+            margin-top: 12px;
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .tag {
+            background: rgba(30, 60, 114, 0.1);
+            color: var(--engineering-blue);
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            border: 1px solid rgba(30, 60, 114, 0.2);
+        }
+
+        .theme-toggle {
+            position: fixed;
+            top: 30px;
+            left: 30px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 25px;
+            padding: 10px 20px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'DIN Next', sans-serif;
+        }
+
+        .theme-toggle:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 80px;
+            padding: 50px;
+            background: var(--glass-bg);
+            border-radius: 30px;
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+        }
+
+        footer p {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1.1rem;
+            line-height: 1.8;
+            font-weight: 400;
+        }
+
+        .footer-links {
+            margin-top: 30px;
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+
+        .footer-link {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .footer-link:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 768px) {
+            .categories {
+                grid-template-columns: 1fr;
+            }
+            
+            h1 {
+                font-size: 2.5rem;
+            }
+            
+            .search-input {
+                width: 100%;
+            }
+            
+            .nav-links {
+                gap: 15px;
+            }
+            
+            .navbar {
+                position: relative;
+                top: 0;
+                transform: none;
+                margin-bottom: 20px;
+            }
+            
+            header {
+                margin-top: 20px;
+            }
+        }
+
+        .loading-animation {
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 0.8s ease forwards;
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="floating-particles" id="particles"></div>
+    
+    <div class="theme-toggle" onclick="toggleTheme()">
+        🌙 الوضع الليلي
+    </div>
+
+    <nav class="navbar">
+        <div class="nav-links">
+            <a href="#home" class="nav-link">الرئيسية</a>
+            <a href="#categories" class="nav-link">الأقسام الهندسية</a>
+            <a href="#general" class="nav-link">المواد العامة</a>
+            <a href="#about" class="nav-link">حول</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <header id="home">
+            <div class="header-content">
+                <h1>⚙️ مرجع المهندس</h1>
+                <p class="subtitle">منصة شاملة للمراجع الهندسية العالمية - كل ما يحتاجه المهندس في مكان واحد</p>
+                <div class="quick-stats">
+                    <div class="quick-stat">
+                        <span>🏗️ هندسة شاملة</span>
+                    </div>
+                    <div class="quick-stat">
+                        <span>📐 مراجع موثوقة</span>
+                    </div>
+                    <div class="quick-stat">
+                        <span>🆓 مجاني تماماً</span>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <div class="search-section">
+            <div class="search-container">
+                <input type="text" class="search-input" placeholder="ابحث في المراجع الهندسية..." id="searchInput">
+                <button class="search-btn" onclick="performSearch()">🔍</button>
+            </div>
+            
+            <div class="filter-tabs">
+                <button class="filter-tab active" onclick="filterCategory('all')">الكل</button>
+                <button class="filter-tab" onclick="filterCategory('civil')">مدني</button>
+                <button class="filter-tab" onclick="filterCategory('mechanical')">ميكانيكي</button>
+                <button class="filter-tab" onclick="filterCategory('electrical')">كهربائي</button>
+                <button class="filter-tab" onclick="filterCategory('chemical')">كيميائي</button>
+                <button class="filter-tab" onclick="filterCategory('computer')">حاسوب</button>
+                <button class="filter-tab" onclick="filterCategory('industrial')">صناعي</button>
+                <button class="filter-tab" onclick="filterCategory('general')">عام</button>
+            </div>
+        </div>
+
+        <div class="stats-dashboard">
+            <div class="stat-card loading-animation" style="animation-delay: 0.1s">
+                <span class="stat-number" id="totalLinks">0</span>
+                <span class="stat-label">مراجع هندسية</span>
+            </div>
+            <div class="stat-card loading-animation" style="animation-delay: 0.2s">
+                <span class="stat-number">7</span>
+                <span class="stat-label">أقسام هندسية</span>
+            </div>
+            <div class="stat-card loading-animation" style="animation-delay: 0.3s">
+                <span class="stat-number">100+</span>
+                <span class="stat-label">أكواد ومعايير</span>
+            </div>
+            <div class="stat-card loading-animation" style="animation-delay: 0.4s">
+                <span class="stat-number">24/7</span>
+                <span class="stat-label">متاح دائماً</span>
+            </div>
+        </div>
+
+        <div class="categories" id="categories">
+            <!-- الهندسة المدنية -->
+            <div class="category loading-animation" data-category="civil" style="animation-delay: 0.5s">
+                <h2>🏗️ الهندسة المدنية</h2>
+                <ul class="links">
+                    <li class="link-item">
+                        <a href="https://www.asce.org" target="_blank">ASCE - الجمعية الأمريكية للمهندسين المدنيين</a>
+                        <p class="link-description">أكبر جمعية مهنية للمهندسين المدنيين مع الأكواد والمعايير الدولية</p>
+                        <div class="link-tags">
+                            <span class="tag">أكواد</span>
+                            <span class="tag">معايير</span>
+                            <span class="tag">مهني</span>
+                        </div>
+                    </li>
+                    <li class="link-item">
+                        <a href="https://www.concrete.org" target="_blank">ACI - معهد الخرسانة الأمريكي</a>
+                        <p class="link-description">المرجع الأول لتصميم وتنفيذ الخرسانة المسلحة والمعايير الدولية</p>
+                        <div class="link-tags">
+                            <span class="tag">خرسانة</span>
+                            <span class="tag">تصميم</span>
+                            <span class="tag">معايير</span>
+                        </div>
+                    </li>
+                    <li class="link-item">
+                        <a href="https://www.aisc.org" target="_blank">AISC - معهد الصلب الأمريكي</a>
+                        <p class="link-description">دليل تصميم المنشآت الصلبية والمعايير الخاصة بالحديد والصلب</p>
+                        <div class="link-tags">
+                            <span class="tag">صلب</span>
+                            <span class="tag">منشآت</span>
+                            <span class="tag">تصميم</span>
+                        </div>
+                    </li>
+                    <li class="link-item">
+                        <a href="https://www.tekla.com" target="_blank">Tekla Structures</a>
+                        <p class="link-description">برنامج النمذجة ثلاثية الأبعاد للمنشآت الصلبية والخرسانية</p>
+                        <div class="link-tags">
+                            <span class="tag">BIM</span>
+                            <span class="tag">نمذجة</span>
+                            <span class="tag">تصميم</span>
+                        </div>
+                    </li>
+                    <li class="link-item">
+                        <a href="https://www.sap2000.com" target="_blank">SAP2000</a>
+                        <p class="link-description">برنامج التحليل الإنشائي المتقدم للمنشآت المعقدة</p>
+                        <div class="link-tags">
+                            <span class="tag">تحليل إنشائي</span>
+                            <span class="tag">برمجيات</span>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- الهندسة الميكانيكية -->
+            <div class="category loading-animation" data-category="mechanical" style="animation-delay: 0.6s">
+                <h2>⚙️ الهندسة الميكانيكية</h2>
+                <ul class="links">
+                    <li class="link-item">
+                        <a href="https://www.asme.org" target="_blank">ASME - الجمعية الأمريكية للمهندسين الميكانيكيين</a>
+                        <p class="link-description">المعايير والأكواد الميكانيكية الدولية والتطوير المهني</p>
+                        <div class="link-tags">
+                            <span class="tag">معايير</span>
+                            <span class="tag">أكواد</span>
+                            <span class="tag">تطوير مهني</span>
+                        </div>
+                    </li>
+                    <li class="link-item">
+                        <a href="https://www.solidworks.com" target="_blank">SolidWorks</a>
+                        <p class="link-description">برنامج التصميم الميكانيكي والنمذجة ثلاثية الأبعاد الأكثر استخداماً</p>
+                        <div class="link-tags">
+                            <span class="tag">CAD</span>
+                            <span class="tag">نمذجة 3D</span>
+                            <span class="tag">تصميم</span>
+                        </div>
+                    </li>
+                    <li class="link-item">
+                        <a href="https://www.autodesk.com/products/autocad" target="_blank">AutoCAD</a>
+                        <p class="link-description">برنامج الرسم الهندسي والتصميم المعماري والميكانيكي</p>
+                        <div class="link-tags">
+                            <span class="tag">رسم هندسي</span>
+                            <span class="tag">تصميم</span>
+                            <span class="tag">2D/3D</span>
+                        </div>
+                    </li>
+                    <li class="link-item">
+                        <a href="https://www.ansys.com" target="_blank">ANSYS</a>
+                        <p class="link-description">برنامج المحاكاة الهندسية والتحليل بالعناصر المحدودة</p>
+                        <div class="link-tags">
+                            <span class="tag">محاكاة</span>
+                            <span class="tag">FEA</span>
+                            <span class="tag">تحليل</span>
+                        </div>
+                    </li>
+                    <li class="link-item">
+                        <a href="https://www.machinedesign.com" target="_blank">Machine Design</a>
+                        <p class="link-description">مجلة تصميم الآلات والتطبيقات الهندسية الحديثة</p>
+                        <div class="link-tags">
+                            <span class="tag">مجلة</span>
+                            <span class="tag">تصميم آلات</span>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- الهندسة الكهربائية -->
+            <div class="category loading-animation" data-category="electrical" style="animation-delay: 0.7s">
+                <h2>⚡ الهندسة الكهربائية</h2>
+                <ul class="links">
+                    <li class="link-item">
+                        <a href="https://www.ieee.org" target="_blank">IEEE - معهد مهندسي الكهرباء والإلكترونيات</a>
+                        <p class="link-description">أكبر منظمة تقنية في العالم للمهندسين الكهربائيين</p>
+                        <div class="link-tags">
+                            <span class="tag">معايير</span>
+                            <span class="tag">أبحاث</span>
+                            <span class="tag">مؤتمرات</span>
+                        </div>
+                    </li>
+                    <li class="link-item">
+                        <a href="https://www.ni.com" target="_blank">National Instruments</a>
+                        <p class="link-description">أدوات القياس والتحكم الصناعي والأتمتة</p>
+                        <div class="link-tags">
+                            <span class="tag">قياس</span>
+                            <span class="tag">تحكم</span>
+                            <span class="tag">أتمتة</span>
+                        </div>
+                    </li>
+                    <li class="link-item">
+                        <a href="https://www.mathworks.com/products/matlab.html" target="_blank">MATLAB</a>
+                        <p class="link-description">بيئة البرمجة والحوسبة التقنية للمهندسين</p>
+                        <div class="link-tags">
+                            <span class="tag">برمجة</span>
+                            <span class="tag">محاكاة</span>
+                            <span class="tag">تحليل</span>
+                        </div>
+                    </li>
+                    <li class="link-item">
+                        <a href="https://www.siemens.com/plm" target="_blank">Siemens PLM</a>
+                        <p class="link-description">حلول إدارة دورة حياة المنتج والأتمتة الصناعية</p>
+                        <div class="link-tags">
+                            <span class="tag">PLM</span>
+                            <span class="tag">أتمتة</span>
+                            <span class="tag">ص
