@@ -1,0 +1,943 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الجدول الدراسي - كلية الهندسة - الجامعة الإسمرية الإسلامية</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+        }
+
+        .header {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 1;
+            font-weight: 700;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            position: relative;
+            z-index: 1;
+        }
+
+        .controls {
+            padding: 30px;
+            background: #f8f9fa;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .filter-group {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .filter-item {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .filter-item label {
+            font-weight: 700;
+            color: #495057;
+            font-size: 0.9rem;
+        }
+
+        select, input {
+            padding: 10px 15px;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-family: 'Tajawal', sans-serif;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        select:focus, input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .search-box {
+            flex: 1;
+            min-width: 250px;
+        }
+
+        .schedule-container {
+            padding: 30px;
+            overflow-x: auto;
+        }
+
+        .schedule-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+
+        .schedule-table th {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            padding: 20px 15px;
+            text-align: center;
+            font-weight: 700;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .schedule-table td {
+            padding: 10px;
+            border: 1px solid #e9ecef;
+            text-align: center;
+            vertical-align: top;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+        
+        .schedule-table tbody tr:hover > td:not(.day-label-cell) {
+            background: #fdfdff;
+        }
+
+        .day-label-cell {
+            background: #f1f3f5;
+            color: #495057;
+            font-weight: 700;
+            vertical-align: middle !important;
+        }
+
+        .subject-cell {
+            position: relative;
+            cursor: pointer;
+            min-height: 60px;
+            background: #ffffff;
+            border: 1px solid #e9ecef;
+            padding: 8px;
+            margin-bottom: 5px;
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .subject-cell:last-child {
+            margin-bottom: 0;
+        }
+
+        .subject-cell:hover {
+            transform: scale(1.03);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            z-index: 5;
+        }
+
+        .subject-name {
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 5px;
+            font-size: 0.85rem;
+        }
+
+        .instructor-name {
+            font-size: 0.75rem;
+            color: #7f8c8d;
+        }
+
+        .room-number {
+            font-size: 0.75rem;
+            color: #c0392b;
+            font-weight: 700;
+        }
+
+        .empty-cell {
+            background: #f8f9fa;
+            color: #adb5bd;
+        }
+
+        .stats {
+            padding: 30px;
+            background: #f8f9fa;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .stat-label {
+            color: #6c757d;
+            font-weight: 500;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+            animation: fadeIn 0.3s ease;
+        }
+        
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes fadeOut { from { opacity: 1; } to { opacity: 0; } }
+
+        .modal-content {
+            background: white;
+            margin: 5% auto;
+            padding: 30px;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: modalSlideIn 0.3s ease;
+        }
+
+        @keyframes modalSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .close {
+            color: #aaa;
+            float: left;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .close:hover {
+            color: #667eea;
+        }
+        
+        #modalBody p {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: #34495e;
+        }
+        
+        #modalBody p strong {
+            color: #1e3c72;
+            font-weight: 700;
+        }
+
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.8rem;
+            }
+            
+            .filter-group {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .schedule-table {
+                font-size: 0.8rem;
+            }
+            
+            .schedule-table td, .schedule-table th {
+                padding: 10px 5px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>كلية الهندسة</h1>
+            <p>الجامعة الإسمرية الإسلامية - الجدول الدراسي لفصل الخريف 2024-2025</p>
+            <p style="font-size: 0.9rem; margin-top: 10px;">تم إنشاء الجدول: 27/02/2025</p>
+        </div>
+
+        <div class="controls">
+            <div class="filter-group">
+                <div class="filter-item">
+                    <label for="dayFilter">اليوم:</label>
+                    <select id="dayFilter">
+                        <option value="">جميع الأيام</option>
+                        <option value="السبت">السبت</option>
+                        <option value="الأحد">الأحد</option>
+                        <option value="الإثنين">الإثنين</option>
+                        <option value="الثلاثاء">الثلاثاء</option>
+                        <option value="الأربعاء">الأربعاء</option>
+                        <option value="الخميس">الخميس</option>
+                    </select>
+                </div>
+                <div class="filter-item">
+                    <label for="timeFilter">الوقت:</label>
+                    <select id="timeFilter">
+                        <option value="">جميع الأوقات</option>
+                        <option value="8:00 ص - 10:00 ص">8:00 ص - 10:00 ص</option>
+                        <option value="10:00 ص - 12:00 م">10:00 ص - 12:00 م</option>
+                        <option value="12:00 م - 2:00 م">12:00 م - 2:00 م</option>
+                        <option value="2:00 م - 4:00 م">2:00 م - 4:00 م</option>
+                        <option value="4:00 م - 6:00 م">4:00 م - 6:00 م</option>
+                    </select>
+                </div>
+                <div class="filter-item search-box">
+                    <label for="searchBox">البحث:</label>
+                    <input type="text" id="searchBox" placeholder="ابحث عن مادة، أستاذ، أو قاعة...">
+                </div>
+            </div>
+        </div>
+
+        <div class="schedule-container">
+            <table class="schedule-table" id="scheduleTable">
+                <thead>
+                    <tr>
+                        <th>اليوم</th>
+                        <th>8:00 - 10:00 ص</th>
+                        <th>10:00 - 12:00 م</th>
+                        <th>12:00 - 2:00 م</th>
+                        <th>2:00 - 4:00 م</th>
+                        <th>4:00 - 6:00 م</th>
+                    </tr>
+                </thead>
+                <tbody id="scheduleBody">
+                    <!-- سيتم ملء البيانات هنا بواسطة JavaScript -->
+                </tbody>
+            </table>
+        </div>
+
+        <div class="stats">
+            <div class="stat-card">
+                <div class="stat-number" id="totalSubjects">0</div>
+                <div class="stat-label">إجمالي المواد</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="totalInstructors">0</div>
+                <div class="stat-label">عدد الأساتذة</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="totalRooms">0</div>
+                <div class="stat-label">عدد القاعات</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number" id="totalHours">0</div>
+                <div class="stat-label">ساعات التدريس الأسبوعية</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal للتفاصيل -->
+    <div id="detailModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2 id="modalTitle">تفاصيل المادة</h2>
+            <div id="modalBody">
+                <!-- سيتم ملء التفاصيل هنا -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // بيانات الجدول الدراسي الكاملة والمعدلة
+        const scheduleData = {
+            'السبت': {
+                '8:00 ص - 10:00 ص': [
+                    { subject: 'رياضة 1', instructor: 'أ. امحمد الصقع', room: '202' },
+                    { subject: 'إهتزازات', instructor: 'أ. عبد السلام شرف', room: '203' },
+                    { subject: 'تصميم معماري 3', instructor: 'د. يوسف طاهر', room: '206' },
+                    { subject: 'اسس تصميم', instructor: 'د. سالم شويخة', room: '207' },
+                    { subject: 'كتابة تقارير فنية', instructor: 'أ. محمد أبوسنينة', room: '208' },
+                    { subject: 'انتقال مادة 2', instructor: 'أ. محمد الديب', room: '301' },
+                    { subject: 'مساحة 2', instructor: 'أ. محمد بن حليم', room: '302' },
+                    { subject: 'مقاومة مواد 1', instructor: 'أ. سالم خوجة', room: '303' },
+                    { subject: 'رياضة 2', instructor: 'أ. سالم عوينات', room: '308' }
+                ],
+                '10:00 ص - 12:00 م': [
+                    { subject: 'رياضة 1', instructor: 'أ. امحمد الصقع', room: '202' },
+                    { subject: 'نظريات عمارة', instructor: 'د. قراض', room: '203' },
+                    { subject: 'برمجة حاسوب', instructor: 'أ. سالم إعبيد', room: '205' },
+                    { subject: 'تصميم معماري 3', instructor: 'د. يوسف طاهر', room: '206' },
+                    { subject: 'اسس تصميم', instructor: 'د. سالم شويخة', room: '207' },
+                    { subject: 'ميكانيكا هندسية 2', instructor: 'أ. احمد العيان', room: '208' },
+                    { subject: 'ميكانيكا هندسية 1', instructor: 'أ. ميلاد التونسي', room: '209' },
+                    { subject: 'هندسة غاز', instructor: 'أ. محمد الديب', room: '301' },
+                    { subject: 'مساحة جيوديسية', instructor: 'أ. محمد بن حليم', room: '302' },
+                    { subject: 'ميكانيكا موائع 2', instructor: 'أ. سالم خوجة', room: '303' },
+                    { subject: 'رياضة 2', instructor: 'أ. سالم عوينات', room: '308' }
+                ],
+                '12:00 م - 2:00 م': [
+                    { subject: 'اساسيات هـ كهربائية', instructor: 'أ. سالم الهمالي', room: '202' },
+                    { subject: 'تقنية ورش', instructor: 'أ. هشام بن طاهر', room: '203' },
+                    { subject: 'برمجة حاسوب', instructor: 'أ. سالم إعبيد', room: '205' },
+                    { subject: 'ميكانيكا هندسية 2', instructor: 'أ. احمد العيان', room: '208' },
+                    { subject: 'ميكانيكا هندسية 1', instructor: 'أ. سالم بلعيد', room: '209' },
+                    { subject: 'كيمياء فيزيائية 2', instructor: 'أ. فرج الكيلاني', room: '301' },
+                    { subject: 'كيمياء فيزيائية 1', instructor: 'أ. نور الدين كريم', room: '302' },
+                    { subject: 'هندسة تفاعلات 1', instructor: 'أ. خالد الجفايري', room: '307' },
+                    { subject: 'موضوعات مختارة في هندسة التحكم', instructor: 'أ. احمد العاتي', room: '308' }
+                ],
+                '2:00 م - 4:00 م': [
+                    { subject: 'الكترونيات رقمية', instructor: 'د. سالم الهمالي', room: '202' },
+                    { subject: 'تقنية ورش', instructor: 'أ. هشام بن طاهر', room: '203' },
+                    { subject: 'رسم معماري', instructor: 'أ. علي هويدي', room: '205' },
+                    { subject: 'تصميم معماري 4', instructor: 'د. قراض', room: '206' },
+                    { subject: 'هندسة انتاج 1', instructor: 'أ. سالم بلعيد', room: '209' },
+                    { subject: 'ميكانيكا الموائع', instructor: 'أ. فرج الكيلاني', room: '301' },
+                    { subject: 'اختیاری', instructor: 'أ. نور الدين كريم', room: '302' },
+                    { subject: 'هندسة انتاج 3', instructor: 'أ. ميلاد التونسي', room: '303' },
+                    { subject: 'انتقال مادة 1', instructor: 'أ. خالد الجفايري', room: '307' }
+                ],
+                '4:00 م - 6:00 م': [
+                    { subject: 'معمل أنظمة تحكم', instructor: 'أ. احمد العاتي', room: '205' },
+                    { subject: 'رسم معماري', instructor: 'أ. علي هويدي', room: '205' },
+                    { subject: 'تصميم معماري 4', instructor: 'د. قراض', room: '206' }
+                ]
+            },
+            'الأحد': {
+                '8:00 ص - 10:00 ص': [
+                    { subject: 'لغة إنجليزية 1', instructor: 'أ. أحمد الاشهب', room: '202' },
+                    { subject: 'هندسة بيئة 1', instructor: 'أ. احمد كندي', room: '203' },
+                    { subject: 'تصميم معماري 1', instructor: 'د. يوسف طاهر', room: '206' },
+                    { subject: 'رياضة 2', instructor: 'أ. سالم عوينات', room: '208' },
+                    { subject: 'إلكترونيات تماثلية', instructor: 'أ. سالم الهمالي', room: '209' },
+                    { subject: 'ديناميكا حرارية 2', instructor: 'أ. احمد العيان', room: '301' },
+                    { subject: 'أحكام الفقه الإسلامي', instructor: 'د. عمر أبوحجر', room: '303' },
+                    { subject: 'شبكة أنابيب', instructor: 'أ. عطية بن نجي', room: '304' },
+                    { subject: 'تكنولوجيا الخرسانة', instructor: 'أ. عبد الله غويلة', room: '306' }
+                ],
+                '10:00 ص - 12:00 م': [
+                    { subject: 'لغة إنجليزية 1', instructor: 'أ. أحمد الاشهب', room: '202' },
+                    { subject: 'ميكانيكا هندسية 1', instructor: 'أ. احمد كندي', room: '203' },
+                    { subject: 'محاكاة عمليات كيميائية', instructor: 'أ. سالم اعبيد', room: '205' },
+                    { subject: 'تصميم معماري 1', instructor: 'د. يوسف طاهر', room: '206' },
+                    { subject: 'دوائر 1', instructor: 'أ. سالم عوينات', room: '208' },
+                    { subject: 'مبادئ هندسة كهربائية', instructor: 'أ. سالم الهمالي', room: '209' },
+                    { subject: 'طرق تحليلات عددية', instructor: 'أ. سعد الغويل', room: '301' },
+                    { subject: 'تدفئة وتكييف', instructor: 'أ. منصور بن عروس', room: '303' },
+                    { subject: 'ميكانيكا موائع 1', instructor: 'م. معمر حميد', room: '304' },
+                    { subject: 'رسم هندسي', instructor: 'أ. عبد الرحمن قويرب', room: '305' },
+                    { subject: 'تقنية ورش', instructor: 'د. احمد العيان', room: '306' }
+                ],
+                '12:00 م - 2:00 م': [
+                    { subject: 'خواص مواد', instructor: 'أ. طارق شميلة', room: '202' },
+                    { subject: 'رياضة 3', instructor: 'أ. امحمد الصقع', room: '203' },
+                    { subject: 'تطبيقات حاسوب', instructor: 'د. قراض', room: '205' },
+                    { subject: 'تطبيقات حاسوب في هـ الكيميائية', instructor: 'أ. محمد الديب', room: '208' },
+                    { subject: 'لغة عربية', instructor: 'د. محمود ابوحجر', room: '209' },
+                    { subject: 'أنظمة تحكم حديثة', instructor: 'أ. سعد الغويل', room: '301' },
+                    { subject: 'إدارة المشاريع', instructor: 'م. محمد شكشك', room: '302' },
+                    { subject: 'رسم هندسي', instructor: 'أ. عبد الرحمن قويرب', room: '305' },
+                    { subject: 'هندسة أساسات', instructor: 'أ. أيمن الكوت', room: '306' }
+                ],
+                '2:00 م - 4:00 م': [
+                    { subject: 'هندسة نقل ومرور', instructor: 'أ. طارق شميلة', room: '202' },
+                    { subject: 'رياضة 4', instructor: 'أ. امحمد الصقع', room: '203' },
+                    { subject: 'تطبيقات حاسوب', instructor: 'د. قراض', room: '205' },
+                    { subject: 'رسم هندسي', instructor: 'د. مصطفى أحمد شكشك', room: '206' },
+                    { subject: 'كيمياء عضوية 1', instructor: 'أ. محمد الديب', room: '208' },
+                    { subject: 'لغة عربية', instructor: 'د. محمود ابوحجر', room: '209' },
+                    { subject: 'مواد بناء', instructor: 'أ. علي هويدي', room: '302' },
+                    { subject: 'مقدمة في الروبوتات', instructor: 'أ. عبد السلام القهواجي', room: '303' },
+                    { subject: 'إحصاء', instructor: 'أ. محمد عبد الله اصميدة', room: '306' }
+                ],
+                '4:00 م - 6:00 م': [
+                    { subject: 'رسم هندسي', instructor: 'د. مصطفى أحمد شكشك', room: '206' }
+                ]
+            },
+            'الإثنين': {
+                '8:00 ص - 10:00 ص': [
+                    { subject: 'مدخل إلى القرآن والسنة', instructor: 'د. حسين عون', room: '202' },
+                    { subject: 'فيزياء 2', instructor: 'د. مصطفى ديهوم', room: '203' },
+                    { subject: 'رسم هندسي', instructor: 'د. مصطفى أحمد شكشك', room: '206' },
+                    { subject: 'نماذج ومجسمات', instructor: 'د. يوسف طاهر', room: '207' },
+                    { subject: 'رياضة 1', instructor: 'أ. امحمد الصقع', room: '208' },
+                    { subject: 'مساحة 1', instructor: 'أ. محمد بن حليم', room: '209' },
+                    { subject: 'مبادئ هندسة كهربائية', instructor: 'أ. سالم الهمالي', room: '302' },
+                    { subject: 'مقاومة مواد 1', instructor: 'أ. سالم خوجة', room: '303' },
+                    { subject: 'المناولة والتخزين', instructor: 'أ. هشام بن طاهر', room: '304' },
+                    { subject: 'فيزياء 1', instructor: 'أ. محمد ابوسنينة', room: '306' },
+                    { subject: 'مقدمة هندسة كيميائية 2', instructor: 'أ. نور الدين كريم', room: '307' },
+                    { subject: 'كهرومغناطيسيات 1', instructor: 'أ. سالم المزعوق', room: '308' }
+                ],
+                '10:00 ص - 12:00 م': [
+                    { subject: 'فيزياء 2', instructor: 'د. مصطفى ديهوم', room: '203' },
+                    { subject: 'انشاء معماري 2', instructor: 'أ. عبد الله الشكري', room: '205' },
+                    { subject: 'انشاء معماري 4', instructor: 'د. فضل المولي', room: '206' },
+                    { subject: 'رياضة 1', instructor: 'د. علي فرحات', room: '208' },
+                    { subject: 'مساحة 2', instructor: 'أ. محمد بن حليم', room: '209' },
+                    { subject: 'اساسيات هـ كهربائية', instructor: 'أ. سالم الهمالي', room: '302' },
+                    { subject: 'هيدرولوجيا', instructor: 'أ. سالم خوجة', room: '303' },
+                    { subject: 'هندسة بيئة', instructor: 'أ. هشام بن طاهر', room: '304' },
+                    { subject: 'فيزياء 1', instructor: 'أ. محمد ابوسنينة', room: '306' },
+                    { subject: 'كيمياء', instructor: 'د. محمد سليم فرحات', room: '307' }
+                ],
+                '12:00 م - 2:00 م': [
+                    { subject: 'فيزياء 2', instructor: 'د. مصطفى ديهوم', room: '203' },
+                    { subject: 'انشاء معماري 1', instructor: 'أ. عبد الله الشكري', room: '205' },
+                    { subject: 'انشاء معماري 3', instructor: 'د. فضل المولي', room: '206' },
+                    { subject: 'رياضة 1', instructor: 'د. علي فرحات', room: '208' },
+                    { subject: 'برمجة حاسوب', instructor: 'أ. سالم إعبيد', room: '209' },
+                    { subject: 'تصميم خرسانة 2', instructor: 'أ. أحمد العيان', room: '301' },
+                    { subject: 'علم معادن', instructor: 'أ. مصطفي صوفيا', room: '302' },
+                    { subject: 'ديناميكا حرارية', instructor: 'أ. فرج الكيلاني', room: '307' }
+                ],
+                '2:00 م - 4:00 م': [
+                    { subject: 'تصميم معماري 3', instructor: 'د. يوسف طاهر', room: '206' },
+                    { subject: 'اظهار معماري', instructor: 'د. ناصر ابوجراد', room: '207' },
+                    { subject: 'ميكانيكا هندسية', instructor: 'أ. رمضان البتي', room: '208' },
+                    { subject: 'أنظمة رقمية', instructor: 'د. فتحي البكوش', room: '209' },
+                    { subject: 'تصميم فولاذ 1', instructor: 'أ. أحمد العيان', room: '301' },
+                    { subject: 'معمل أنظمة تحكم', instructor: 'م. محمد الشريف', room: '302' },
+                    { subject: 'معمل دوائر 1', instructor: 'د. فتحي البكوش', room: '303' },
+                    { subject: 'مقدمة هندسة كيميائية', instructor: 'أ. فرج الكيلاني', room: '307' }
+                ],
+                '4:00 م - 6:00 م': [
+                    { subject: 'تاريخ العمارة', instructor: 'د. فضل المولي', room: '206' },
+                    { subject: 'نظم تحكم مثلى', instructor: 'م. محمد الشريف', room: '301' },
+                    { subject: 'معالجة إشارة', instructor: 'م. محمد الشريف', room: '308' }
+                ]
+            },
+            'الثلاثاء': {
+                '8:00 ص - 10:00 ص': [
+                    { subject: 'مساحة 2', instructor: 'أ. محمد بن حليم', room: '202' },
+                    { subject: 'تصميم خرسانة 2', instructor: 'أ. أحمد العيان', room: '203' },
+                    { subject: 'معمل أنظمة تحكم', instructor: 'أ. احمد العاتي', room: '205' },
+                    { subject: 'تصميم معماري 3', instructor: 'د. يوسف طاهر', room: '206' },
+                    { subject: 'إظهار معماري', instructor: 'د. ناصر ابوجراد', room: '207' },
+                    { subject: 'إدارة الصيانة', instructor: 'أ. مصطفي حكومه', room: '208' },
+                    { subject: 'شبكة أنابيب', instructor: 'أ. عطية بن نجي', room: '209' },
+                    { subject: 'انتقال مادة 2', instructor: 'أ. محمد الديب', room: '301' },
+                    { subject: 'تصميم معماري 4', instructor: 'د. قراض', room: '305' },
+                    { subject: 'لغة إنجليزية 2', instructor: 'أ. أحمد الاشهب', room: '306' },
+                    { subject: 'العقيدة والفكر الإسلامي', instructor: 'أ. الفيتوري الطرلي', room: '307' },
+                    { subject: 'رياضة 3', instructor: 'أ. امحمد الصقع', room: '308' },
+                    { subject: 'معالجات دقيقة', instructor: 'د. فتحي البكوش', room: '309' }
+                ],
+                '10:00 ص - 12:00 م': [
+                    { subject: 'مساحة 1', instructor: 'أ. محمد بن حليم', room: '202' },
+                    { subject: 'علم معادن', instructor: 'أ. مصطفي صوفيا', room: '203' },
+                    { subject: 'معمل دوائر 1', instructor: 'د. فتحي البكوش', room: '205' },
+                    { subject: 'تصميم معماري 3', instructor: 'د. يوسف طاهر', room: '206' },
+                    { subject: 'إظهار معماري', instructor: 'د. ناصر ابوجراد', room: '207' },
+                    { subject: 'كيمياء عضوية 1', instructor: 'أ. محمد الديب', room: '301' },
+                    { subject: 'تصميم معماري 4', instructor: 'د. قراض', room: '305' },
+                    { subject: 'لغة إنجليزية 2', instructor: 'أ. أحمد الاشهب', room: '306' },
+                    { subject: 'هندسة نقل وطرق', instructor: 'أ. طارق شميلة', room: '307' },
+                    { subject: 'رياضة 4', instructor: 'أ. امحمد الصقع', room: '308' },
+                    { subject: 'نظم تحكم متشابهة', instructor: 'أ. سالم إعبيد', room: '309' }
+                ],
+                '12:00 م - 2:00 م': [
+                    { subject: 'مدخل إلى القرآن والسنة', instructor: 'د. حسين عون', room: '202' },
+                    { subject: 'فيزياء 2', instructor: 'د. مصطفى ديهوم', room: '203' },
+                    { subject: 'نماذج ومجسمات', instructor: 'د. يوسف طاهر', room: '206' },
+                    { subject: 'إدارة المشروعات الهندسية', instructor: 'م. محمد شكشك', room: '209' },
+                    { subject: 'طرق تحليلات عددية', instructor: 'أ. سعد الغويل', room: '208' },
+                    { subject: 'ميكانيكا موائع 2', instructor: 'أ. سالم خوجة', room: '306' },
+                    { subject: 'خواص مواد', instructor: 'أ. طارق شميلة', room: '307' },
+                    { subject: 'لغة عربية', instructor: 'د. محمود ابوحجر', room: '308' },
+                    { subject: 'أنظمة تحكم 2', instructor: 'أ. سالم إعبيد', room: '309' }
+                ],
+                '2:00 م - 4:00 م': [
+                    { subject: 'مدخل إلى القرآن والسنة', instructor: 'د. حسين عون', room: '202' },
+                    { subject: 'فيزياء 2', instructor: 'د. مصطفى ديهوم', room: '203' },
+                    { subject: 'نماذج ومجسمات', instructor: 'د. يوسف طاهر', room: '206' },
+                    { subject: 'رسم هندسي', instructor: 'د. مصطفى أحمد شكشك', room: '207' },
+                    { subject: 'فيزياء 1', instructor: 'أ. محمد ابوسنينة', room: '208' },
+                    { subject: 'تصميم فولاذ 1', instructor: 'أ. أحمد العيان', room: '209' },
+                    { subject: 'هندسة وصفية', instructor: 'أ. سالم خوجة', room: '306' },
+                    { subject: 'لغة عربية', instructor: 'د. محمود ابوحجر', room: '308' }
+                ],
+                '4:00 م - 6:00 م': [
+                    { subject: 'رسم هندسي', instructor: 'د. مصطفى أحمد شكشك', room: '207' }
+                ]
+            },
+            'الأربعاء': {
+                '8:00 ص - 10:00 ص': [
+                    { subject: 'هندسة تفاعلات 1', instructor: 'أ. خالد الجفايري', room: '202' },
+                    { subject: 'إدارة الصيانة', instructor: 'أ. مصطفي حكومه', room: '203' },
+                    { subject: 'تطبيقات حاسوب في الهندسة المدنية', instructor: 'غير محدد', room: '205' },
+                    { subject: 'تصميم معماري 2', instructor: 'د. فضل المولي', room: '207' },
+                    { subject: 'كيمياء فيزيائية 1', instructor: 'أ. نور الدين كريم', room: '208' },
+                    { subject: 'كيمياء فيزيائية 2', instructor: 'أ. فرج الكيلاني', room: '209' },
+                    { subject: 'هندسة بيئة 1', instructor: 'أ. احمد كندي', room: '302' },
+                    { subject: 'ميكانيكا هندسية 1', instructor: 'غير محدد', room: '303' },
+                    { subject: 'معالجة إشارة رقمية', instructor: 'م. محمد الشريف', room: '306' },
+                    { subject: 'تقنيات ورش', instructor: 'أ. هشام بن طاهر', room: '308' },
+                    { subject: 'ميكانيكا تربة 1', instructor: 'أ. عبد الله غويلة', room: '309' }
+                ],
+                '10:00 ص - 12:00 م': [
+                    { subject: 'انتقال مادة 1', instructor: 'أ. خالد الجفايري', room: '202' },
+                    { subject: 'كيمياء', instructor: 'د. محمد سليم فرحات', room: '203' },
+                    { subject: 'تطبيقات حاسوب في الهندسة المدنية', instructor: 'غير محدد', room: '205' },
+                    { subject: 'نظريات ومبادئ التخطيط', instructor: 'غير محدد', room: '206' },
+                    { subject: 'تصميم معماري 2', instructor: 'د. فضل المولي', room: '207' },
+                    { subject: 'اختياري', instructor: 'أ. نور الدين كريم', room: '208' },
+                    { subject: 'ميكانيكا الموائع', instructor: 'أ. فرج الكيلاني', room: '209' },
+                    { subject: 'اهتزازات', instructor: 'أ. عبد السلام شرف', room: '301' },
+                    { subject: 'ميكانيكا هندسية 1', instructor: 'أ. احمد كندي', room: '302' },
+                    { subject: 'ميكانيكا هندسية 2', instructor: 'أ. احمد العيان', room: '303' },
+                    { subject: 'مساحة 1', instructor: 'أ. محمد بن حليم', room: '304' },
+                    { subject: 'إشارات ونظم', instructor: 'م. محمد الشريف', room: '306' },
+                    { subject: 'مدخل إلى القرآن والسنة', instructor: 'د. حسين عون', room: '307' },
+                    { subject: 'تقنيات ورش', instructor: 'أ. هشام بن طاهر', room: '308' },
+                    { subject: 'تكنولوجيا الخرسانة', instructor: 'أ. عبد الله غويلة', room: '309' }
+                ],
+                '12:00 م - 2:00 م': [
+                    { subject: 'أساسيات دوائر إلكترونية', instructor: 'غير محدد', room: '202' },
+                    { subject: 'مقدمة في الروبوتات', instructor: 'أ. عبد السلام القهواجي', room: '203' },
+                    { subject: 'تخطيط عمراني', instructor: 'د. قراض', room: '206' },
+                    { subject: 'تصميم معماري 1', instructor: 'د. يوسف طاهر', room: '207' },
+                    { subject: 'آلات كهربائية 1', instructor: 'أ. سليمان بن رحمة', room: '208' },
+                    { subject: 'تطبيقات حاسوب في الهندسة الكيميائية', instructor: 'غير محدد', room: '209' },
+                    { subject: 'تشييد مباني', instructor: 'أ. محمد شكشك', room: '301' },
+                    { subject: 'ميكانيكا هندسية 1', instructor: 'أ. ميلاد التونسي', room: '302' },
+                    { subject: 'ميكانيكا هندسية 2', instructor: 'أ. احمد العيان', room: '303' },
+                    { subject: 'مساحة جيوديسية', instructor: 'أ. محمد بن حليم', room: '304' },
+                    { subject: 'تصميم معماري 2', instructor: 'د. فضل المولي', room: '305' },
+                    { subject: 'هندسة إنتاج 1', instructor: 'أ. أسالم بلعيد', room: '306' },
+                    { subject: 'فيزياء 1', instructor: 'أ. محمد ابوسنينة', room: '308' },
+                    { subject: 'دوائر 1', instructor: 'أ. سالم عوينات', room: '309' }
+                ],
+                '2:00 م - 4:00 م': [
+                    { subject: 'معالجات دقيقة', instructor: 'د. فتحي البكوش', room: '202' },
+                    { subject: 'رياضة 1', instructor: 'د. علي فرحات', room: '203' },
+                    { subject: 'تخطيط عمراني', instructor: 'د. قراض', room: '206' },
+                    { subject: 'لغة إنجليزية 2', instructor: 'أ. أحمد الاشهب', room: '208' },
+                    { subject: 'هندسة غاز', instructor: 'أ. محمد الديب', room: '209' },
+                    { subject: 'تأهيل منشآت', instructor: 'أ. محمد شكشك', room: '301' },
+                    { subject: 'هندسة إنتاج 3', instructor: 'أ. ميلاد التونسي', room: '302' },
+                    { subject: 'تصميم معماري 2', instructor: 'د. فضل المولي', room: '305' },
+                    { subject: 'ميكانيكا هندسية 1', instructor: 'أ. رمضان البتي', room: '306' },
+                    { subject: 'رياضة 2', instructor: 'أ. سالم عوينات', room: '309' }
+                ],
+                '4:00 م - 6:00 م': []
+            },
+            'الخميس': {
+                '8:00 ص - 10:00 ص': [
+                    { subject: 'أنظمة رقمية', instructor: 'د. فتحي البكوش', room: '202' },
+                    { subject: 'هندسة بيئة مصانع', instructor: 'أ. هشام بن طاهر', room: '203' },
+                    { subject: 'تصميم داخلي 1', instructor: 'أ. عيسى صوان', room: '206' },
+                    { subject: 'تدفئة وتكييف وتبريد 1', instructor: 'أ. منصور بن عروس', room: '207' },
+                    { subject: 'إحصاء', instructor: 'أ. محمد عبد الله اصميدة', room: '208' },
+                    { subject: 'هيدرولوجيا', instructor: 'أ. سالم خوجة', room: '209' },
+                    { subject: 'كهرومغناطيسيات 1', instructor: 'أ. سالم المزعوق', room: '301' },
+                    { subject: 'لغة انجليزية 1', instructor: 'أ. أحمد الاشهب', room: '303' },
+                    { subject: 'نظرية إنشاءات 2', instructor: 'أ. أحمد العيان', room: '304' },
+                    { subject: 'الظل والمنظور الهندسي', instructor: 'د. يوسف طاهر', room: '305' },
+                    { subject: 'رياضة 1', instructor: 'د. علي فرحات', room: '306' },
+                    { subject: 'فيزياء 2', instructor: 'د. مصطفى ديهوم', room: '307' },
+                    { subject: 'ظواهر الانتقال', instructor: 'أ. خالد الجفايري', room: '308' }
+                ],
+                '10:00 ص - 12:00 م': [
+                    { subject: 'أساسيات دوائر إلكترونية', instructor: 'غير محدد', room: '202' },
+                    { subject: 'إدارة المناولة والتخزين', instructor: 'أ. هشام بن طاهر', room: '203' },
+                    { subject: 'محاكاة عمليات كيميائية', instructor: 'أ. سالم اعبيد', room: '205' },
+                    { subject: 'تصميم داخلي 1', instructor: 'أ. عيسى صوان', room: '206' },
+                    { subject: 'ميكانيكا موائع 1', instructor: 'م. معمر حميد', room: '207' },
+                    { subject: 'فيزياء 1', instructor: 'أ. محمد ابوسنينة', room: '208' },
+                    { subject: 'هندسة وصفية', instructor: 'أ. سالم خوجة', room: '209' },
+                    { subject: 'العقيدة والفكر الإسلامي', instructor: 'أ. الفيتوري الطرلي', room: '301' },
+                    { subject: 'إلكترونيات تماثلية', instructor: 'أ. سالم الهمالي', room: '302' },
+                    { subject: 'لغة انجليزية 2', instructor: 'أ. أحمد الاشهب', room: '303' },
+                    { subject: 'تقنية ورش', instructor: 'د. احمد العيان', room: '304' },
+                    { subject: 'الظل والمنظور الهندسي', instructor: 'د. يوسف طاهر', room: '305' },
+                    { subject: 'رياضة 1', instructor: 'د. علي فرحات', room: '306' },
+                    { subject: 'فيزياء 2', instructor: 'د. مصطفى ديهوم', room: '307' },
+                    { subject: 'كيمياء عضوية 2', instructor: 'أ. خالد الجفايري', room: '308' },
+                    { subject: 'أنظمة تحكم حديثة', instructor: 'أ. سعد الغويل', room: '309' }
+                ],
+                '12:00 م - 2:00 م': [
+                    { subject: 'العقيدة والفكر الإسلامي', instructor: 'أ. الفيتوري الطرلي', room: '202' },
+                    { subject: 'هندسة أساسات', instructor: 'أ. أيمن الكوت', room: '202' },
+                    { subject: 'رسم مدني', instructor: 'أ. محمد بن حليم', room: '205' },
+                    { subject: 'رسم حر', instructor: 'أ. عيسى صوان', room: '206' },
+                    { subject: 'تحكم بيئي', instructor: 'د. فضل المولي', room: '207' },
+                    { subject: 'فيزياء 1', instructor: 'أ. محمد ابوسنينة', room: '208' },
+                    { subject: 'ديناميكا حرارية 1', instructor: 'أ. فرج الكيلاني', room: '209' },
+                    { subject: 'ديناميكا حرارية 2', instructor: 'أ. احمد العيان', room: '304' },
+                    { subject: 'كيمياء', instructor: 'أ. نور الدين كريم', room: '307' }
+                ],
+                '2:00 م - 4:00 م': [
+                    { subject: 'موضوعات مختارة في هندسة التحكم', instructor: 'أ. احمد العاتي', room: '202' },
+                    { subject: 'رسم مدني', instructor: 'أ. محمد بن حليم', room: '205' },
+                    { subject: 'رسم حر', instructor: 'أ. عيسى صوان', room: '206' },
+                    { subject: 'مقدمة هندسة كيميائية 1', instructor: 'أ. فرج الكيلاني', room: '207' },
+                    { subject: 'مقدمة هندسة كيميائية 1', instructor: 'غير محدد', room: '209' }
+                ],
+                '4:00 م - 6:00 م': [
+                    { subject: 'انظمة تحكم متعددة المتغيرات', instructor: 'أ. أحمد العاتي', room: '208' }
+                ]
+            }
+        };
+
+        // متغيرات للإحصائيات
+        let totalSubjects = new Set();
+        let totalInstructors = new Set();
+        let totalRooms = new Set();
+        let totalHours = 0;
+
+        // *** دالة عرض الجدول (مُعدّلة) ***
+        function displaySchedule(dataToDisplay) {
+            const tbody = document.getElementById('scheduleBody');
+            tbody.innerHTML = '';
+            
+            // إعادة تعيين الإحصائيات قبل إعادة الحساب
+            totalSubjects.clear();
+            totalInstructors.clear();
+            totalRooms.clear();
+            totalHours = 0;
+
+            const timeSlots = ['8:00 ص - 10:00 ص', '10:00 ص - 12:00 م', '12:00 م - 2:00 م', '2:00 م - 4:00 م', '4:00 م - 6:00 م'];
+            const days = ['السبت', 'الأحد', 'الإثنين', 'الثلاثاء', 'الأربعاء', 'الخميس'];
+
+            days.forEach(day => {
+                const row = document.createElement('tr');
+                
+                // خلية اليوم
+                const dayCell = document.createElement('td');
+                dayCell.className = 'day-label-cell';
+                dayCell.textContent = day;
+                row.appendChild(dayCell);
+
+                // خلايا الأوقات
+                timeSlots.forEach(timeSlot => {
+                    const cell = document.createElement('td');
+                    let cellContent = '';
+                    
+                    if (dataToDisplay[day] && dataToDisplay[day][timeSlot]) {
+                        const subjects = dataToDisplay[day][timeSlot];
+                        
+                        subjects.forEach(subject => {
+                            cellContent += `
+                                <div class="subject-cell" data-day="${day}" data-timeslot="${timeSlot}">
+                                    <div class="subject-name">${subject.subject}</div>
+                                    <div class="instructor-name">${subject.instructor || 'غير محدد'}</div>
+                                    <div class="room-number">قاعة ${subject.room}</div>
+                                </div>
+                            `;
+                            
+                            // إضافة البيانات للإحصائيات (فقط عند عرض الجدول الكامل)
+                            if(document.getElementById('dayFilter').value === '' && document.getElementById('timeFilter').value === '' && document.getElementById('searchBox').value === '') {
+                                totalSubjects.add(subject.subject);
+                                totalInstructors.add(subject.instructor);
+                                totalRooms.add(subject.room);
+                                totalHours += 2;
+                            }
+                        });
+                    }
+                    
+                    if (cellContent === '') {
+                        cell.className = 'empty-cell';
+                        cell.innerHTML = `<div>-</div>`;
+                    } else {
+                        cell.innerHTML = cellContent;
+                    }
+                    
+                    row.appendChild(cell);
+                });
+                
+                tbody.appendChild(row);
+            });
+            
+            if(document.getElementById('dayFilter').value === '' && document.getElementById('timeFilter').value === '' && document.getElementById('searchBox').value === '') {
+                updateStats();
+            }
+            addCellClickListeners();
+        }
+
+        // تحديث الإحصائيات
+        function updateStats() {
+            document.getElementById('totalSubjects').textContent = totalSubjects.size;
+            document.getElementById('totalInstructors').textContent = totalInstructors.size;
+            document.getElementById('totalRooms').textContent = totalRooms.size;
+            document.getElementById('totalHours').textContent = totalHours;
+        }
+
+        // عرض تفاصيل المادة
+        function showDetails(subject, day, timeSlot) {
+            const modal = document.getElementById('detailModal');
+            const modalTitle = document.getElementById('modalTitle');
+            const modalBody = document.getElementById('modalBody');
+            
+            modalTitle.textContent = subject.subject;
+            modalBody.innerHTML = `
+                <p><strong>الأستاذ:</strong> ${subject.instructor || 'غير محدد'}</p>
+                <p><strong>القاعة:</strong> ${subject.room}</p>
+                <p><strong>اليوم:</strong> ${day}</p>
+                <p><strong>الوقت:</strong> ${timeSlot}</p>
+            `;
+            
+            modal.style.display = 'block';
+        }
+        
+        // إضافة حدث النقر للخلايا بعد إنشائها
+        function addCellClickListeners() {
+            document.querySelectorAll('.subject-cell').forEach(cell => {
+                cell.addEventListener('click', (e) => {
+                    const targetCell = e.currentTarget;
+                    const day = targetCell.dataset.day;
+                    const timeSlot = targetCell.dataset.timeslot;
+                    
+                    const subjectName = targetCell.querySelector('.subject-name').textContent;
+                    const instructorName = targetCell.querySelector('.instructor-name').textContent;
+
+                    // البحث عن بيانات المادة الأصلية
+                    const subjectData = scheduleData[day][timeSlot].find(s => 
+                        s.subject === subjectName && (s.instructor || 'غير محدد') === instructorName
+                    );
+
+                    if(subjectData) {
+                        showDetails(subjectData, day, timeSlot);
+                    }
+                });
+            });
+        }
+
+
+        // البحث والتصفية
+        function filterSchedule() {
+            const dayFilter = document.getElementById('dayFilter').value;
+            const timeFilter = document.getElementById('timeFilter').value;
+            const searchTerm = document.getElementById('searchBox').value.toLowerCase().trim();
+            
+            let filteredData = {};
+            
+            const daysToDisplay = dayFilter ? [dayFilter] : Object.keys(scheduleData);
+
+            daysToDisplay.forEach(day => {
+                let dayHasMatchingSubjects = false;
+                filteredData[day] = {};
+                
+                Object.keys(scheduleData[day]).forEach(timeSlot => {
+                    if (!timeFilter || timeSlot === timeFilter) {
+                        const subjects = scheduleData[day][timeSlot].filter(subject => 
+                            !searchTerm || 
+                            subject.subject.toLowerCase().includes(searchTerm) ||
+                            (subject.instructor || '').toLowerCase().includes(searchTerm) ||
+                            subject.room.toLowerCase().includes(searchTerm)
+                        );
+                        
+                        if (subjects.length > 0) {
+                            if(!filteredData[day]) filteredData[day] = {};
+                            filteredData[day][timeSlot] = subjects;
+                            dayHasMatchingSubjects = true;
+                        }
+                    } else {
+                         // إذا كان هناك فلترة بالوقت، نحتاج لنسخ الخانات الأخرى الفارغة لليوم
+                        if(filteredData[day] && !filteredData[day][timeSlot]){
+                           filteredData[day][timeSlot] = [];
+                        }
+                    }
+                });
+                 if(!dayHasMatchingSubjects && (searchTerm || timeFilter)) {
+                    delete filteredData[day];
+                }
+            });
+            
+            displaySchedule(filteredData);
+        }
+
+        // إضافة مستمعي الأحداث
+        document.getElementById('dayFilter').addEventListener('change', filterSchedule);
+        document.getElementById('timeFilter').addEventListener('change', filterSchedule);
+        document.getElementById('searchBox').addEventListener('input', filterSchedule);
+
+        // إغلاق النافذة المنبثقة
+        const modal = document.getElementById('detailModal');
+        document.querySelector('.close').addEventListener('click', () => {
+            modal.style.animation = "fadeOut 0.3s ease";
+            setTimeout(() => {
+                modal.style.display = 'none';
+                modal.style.animation = "";
+            }, 280);
+        });
+
+        window.addEventListener('click', (event) => {
+            if (event.target === modal) {
+                modal.style.animation = "fadeOut 0.3s ease";
+                setTimeout(() => {
+                    modal.style.display = 'none';
+                    modal.style.animation = "";
+                }, 280);
+            }
+        });
+
+        // تشغيل الموقع لأول مرة
+        displaySchedule(scheduleData);
+    </script>
+</body>
+</html>
