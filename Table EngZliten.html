@@ -1,12 +1,10 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-    <meta charset="UTF-8">
+<html lang="ar" dir="rtl"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>الجدول الدراسي - كلية الهندسة - الجامعة الإسمرية الإسلامية</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com/">
+    <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="">
+    <link href="./الجدول222 الدراسي - كلية الهندسة - الجامعة الإسمرية الإسلامية_files/css2" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -19,6 +17,8 @@
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             padding: 20px;
+            display: flex;
+            flex-direction: column;
         }
 
         .container {
@@ -29,6 +29,7 @@
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
             overflow: hidden;
             backdrop-filter: blur(10px);
+            flex-grow: 1;
         }
 
         .header {
@@ -301,6 +302,12 @@
             font-weight: 700;
         }
 
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: white;
+            font-size: 0.9rem;
+        }
 
         @media (max-width: 768px) {
             .header h1 {
@@ -327,7 +334,7 @@
         <div class="header">
             <h1>كلية الهندسة</h1>
             <p>الجامعة الإسمرية الإسلامية - الجدول الدراسي لفصل الخريف 2024-2025</p>
-            <p style="font-size: 0.9rem; margin-top: 10px;">تم إنشاء الجدول: 27/02/2025</p>
+            <p style="font-size: 0.9rem; margin-top: 10px;">آخر تحديث: 11 / 06 / 2025</p>
         </div>
 
         <div class="controls">
@@ -374,42 +381,66 @@
                         <th>4:00 - 6:00 م</th>
                     </tr>
                 </thead>
-                <tbody id="scheduleBody">
-                    <!-- سيتم ملء البيانات هنا بواسطة JavaScript -->
-                </tbody>
+                <tbody id="scheduleBody"><tr><td class="day-label-cell">السبت</td><td class="empty-cell"><div>-</div></td><td class="empty-cell"><div>-</div></td><td class="empty-cell"><div>-</div></td><td class="empty-cell"><div>-</div></td><td class="empty-cell"><div>-</div></td></tr><tr><td class="day-label-cell">الأحد</td><td class="empty-cell"><div>-</div></td><td class="empty-cell"><div>-</div></td><td class="empty-cell"><div>-</div></td><td class="empty-cell"><div>-</div></td><td class="empty-cell"><div>-</div></td></tr><tr><td class="day-label-cell">الإثنين</td><td>
+                                    <div class="subject-cell" data-day="الإثنين" data-timeslot="8:00 ص - 10:00 ص">
+                                        <div class="subject-name">تصميم فولاذ 1</div>
+                                        <div class="instructor-name">أ. أحمد العيان</div>
+                                        <div class="room-number">قاعة 202</div>
+                                    </div>
+                                </td><td class="empty-cell"><div>-</div></td><td class="empty-cell"><div>-</div></td><td class="empty-cell"><div>-</div></td><td class="empty-cell"><div>-</div></td></tr><tr><td class="day-label-cell">الثلاثاء</td><td class="empty-cell"><div>-</div></td><td class="empty-cell"><div>-</div></td><td>
+                                    <div class="subject-cell" data-day="الثلاثاء" data-timeslot="12:00 م - 2:00 م">
+                                        <div class="subject-name">نماذج ومجسمات</div>
+                                        <div class="instructor-name">د. يوسف طاهر</div>
+                                        <div class="room-number">قاعة 206</div>
+                                    </div>
+                                </td><td>
+                                    <div class="subject-cell" data-day="الثلاثاء" data-timeslot="2:00 م - 4:00 م">
+                                        <div class="subject-name">نماذج ومجسمات</div>
+                                        <div class="instructor-name">د. يوسف طاهر</div>
+                                        <div class="room-number">قاعة 206</div>
+                                    </div>
+                                
+                                    <div class="subject-cell" data-day="الثلاثاء" data-timeslot="2:00 م - 4:00 م">
+                                        <div class="subject-name">تصميم فولاذ 1</div>
+                                        <div class="instructor-name">أ. أحمد العيان</div>
+                                        <div class="room-number">قاعة 209</div>
+                                    </div>
+                                </td><td class="empty-cell"><div>-</div></td></tr><tr><td class="day-label-cell">الأربعاء</td><td class="empty-cell"><div>-</div></td><td class="empty-cell"><div>-</div></td><td class="empty-cell"><div>-</div></td><td class="empty-cell"><div>-</div></td><td class="empty-cell"><div>-</div></td></tr><tr><td class="day-label-cell">الخميس</td><td class="empty-cell"><div>-</div></td><td class="empty-cell"><div>-</div></td><td class="empty-cell"><div>-</div></td><td class="empty-cell"><div>-</div></td><td class="empty-cell"><div>-</div></td></tr></tbody>
             </table>
         </div>
 
         <div class="stats">
             <div class="stat-card">
-                <div class="stat-number" id="totalSubjects">0</div>
+                <div class="stat-number" id="totalSubjects">132</div>
                 <div class="stat-label">إجمالي المواد</div>
             </div>
             <div class="stat-card">
-                <div class="stat-number" id="totalInstructors">0</div>
+                <div class="stat-number" id="totalInstructors">65</div>
                 <div class="stat-label">عدد الأساتذة</div>
             </div>
             <div class="stat-card">
-                <div class="stat-number" id="totalRooms">0</div>
+                <div class="stat-number" id="totalRooms">16</div>
                 <div class="stat-label">عدد القاعات</div>
             </div>
             <div class="stat-card">
-                <div class="stat-number" id="totalHours">0</div>
+                <div class="stat-number" id="totalHours">544</div>
                 <div class="stat-label">ساعات التدريس الأسبوعية</div>
             </div>
         </div>
     </div>
 
-    <!-- Modal للتفاصيل -->
     <div id="detailModal" class="modal">
         <div class="modal-content">
-            <span class="close">&times;</span>
+            <span class="close">×</span>
             <h2 id="modalTitle">تفاصيل المادة</h2>
             <div id="modalBody">
-                <!-- سيتم ملء التفاصيل هنا -->
-            </div>
+                </div>
         </div>
     </div>
+
+    <footer class="footer">
+        جميع الحقوق محفوظة للطالب زياد أبولائطة
+    </footer>
 
     <script>
         // بيانات الجدول الدراسي الكاملة والمعدلة
@@ -479,7 +510,7 @@
                     { subject: 'تكنولوجيا الخرسانة', instructor: 'أ. عبد الله غويلة', room: '306' },
                     { subject: 'مدخل إلى القرآن والسنة', instructor: 'د. حسين عون', room: '307' },
                     { subject: 'فيزياء 2', instructor: 'د. مصطفى ديهوم', room: '308' },
-                    { subject: 'معالجة إشارات رقمية', instructor: 'م. محمد الشريف', room: '309' }
+                    { subject: 'معالجة إشارات رقمية', instructor: 'د. محمد الشريف', room: '309' }
                 ],
                 '10:00 ص - 12:00 م': [
                     { subject: 'لغة إنجليزية 1', instructor: 'أ. أحمد الاشهب', room: '202' },
@@ -496,7 +527,7 @@
                     { subject: 'تقنية ورش', instructor: 'د. احمد العيان', room: '306' },
                     { subject: 'مدخل إلى القرآن والسنة', instructor: 'د. حسين عون', room: '307' },
                     { subject: 'فيزياء 2', instructor: 'د. مصطفى ديهوم', room: '308' },
-                    { subject: 'نظم تحكم مثلى', instructor: 'م. محمد الشريف', room: '309' }
+                    { subject: 'نظم تحكم مثلى', instructor: 'د. محمد الشريف', room: '309' }
                 ],
                 '12:00 م - 2:00 م': [
                     { subject: 'خواص مواد', instructor: 'أ. طارق شميلة', room: '202' },
@@ -545,7 +576,7 @@
                     { subject: 'معالجات دقيقة', instructor: 'د. فتحي البكوش', room: '309' }
                 ],
                 '10:00 ص - 12:00 م': [
-                    { subject: 'نظم تحكم مثلى', instructor: 'م. محمد الشريف', room: '202' },
+                    { subject: 'نظم تحكم مثلى', instructor: 'د. محمد الشريف', room: '202' },
                     { subject: 'ميكانيكا هندسية', instructor: 'أ. رمضان البتي', room: '203' },
                     { subject: 'برمجة حاسوب', instructor: 'أ. سالم إعبيد', room: '205' },
                     { subject: 'انشاء معماري 1', instructor: 'أ. عبد الله الشكري', room: '206' },
@@ -562,7 +593,7 @@
                     { subject: 'نظم تحكم متشابهة', instructor: 'أ. سالم إعبيد', room: '309' }
                 ],
                 '12:00 م - 2:00 م': [
-                    { subject: 'إشارات ونظم', instructor: 'م. محمد الشريف', room: '202' },
+                    { subject: 'إشارات ونظم', instructor: 'د. محمد الشريف', room: '202' },
                     { subject: 'ميكانيكا تربة 1', instructor: 'أ. عبدالله غويلة', room: '203' },
                     { subject: 'برمجة حاسوب', instructor: 'أ. سالم إعبيد', room: '205' },
                     { subject: 'انشاء معماري 2', instructor: 'أ. عبد الله الشكري', room: '206' },
@@ -644,21 +675,21 @@
                 '8:00 ص - 10:00 ص': [
                     { subject: 'هندسة تفاعلات 1', instructor: 'أ. خالد الجفايري', room: '202' },
                     { subject: 'إدارة الصيانة', instructor: 'أ. مصطفي حكومه', room: '203' },
-                    { subject: 'تطبيقات حاسوب في الهندسة المدنية', instructor: 'غير محدد', room: '205' },
+                    { subject: 'تطبيقات حاسوب في الهندسة المدنية', instructor: 'أ. أحمد عبد السلام العيان', room: '205' },
                     { subject: 'تصميم معماري 2', instructor: 'د. فضل المولي', room: '207' },
                     { subject: 'كيمياء فيزيائية 1', instructor: 'أ. نور الدين كريم', room: '208' },
                     { subject: 'كيمياء فيزيائية 2', instructor: 'أ. فرج الكيلاني', room: '209' },
                     { subject: 'هندسة بيئة 1', instructor: 'أ. احمد كندي', room: '302' },
-                    { subject: 'ميكانيكا هندسية 1', instructor: 'غير محدد', room: '303' },
-                    { subject: 'معالجة إشارة رقمية', instructor: 'م. محمد الشريف', room: '306' },
+                    { subject: 'ميكانيكا هندسية 1', instructor: 'أ. رمضان البتي', room: '303' },
+                    { subject: 'معالجة إشارة رقمية', instructor: 'د. محمد الشريف', room: '306' },
                     { subject: 'تقنيات ورش', instructor: 'أ. هشام بن طاهر', room: '308' },
                     { subject: 'ميكانيكا تربة 1', instructor: 'أ. عبد الله غويلة', room: '309' }
                 ],
                 '10:00 ص - 12:00 م': [
                     { subject: 'انتقال مادة 1', instructor: 'أ. خالد الجفايري', room: '202' },
                     { subject: 'كيمياء', instructor: 'د. محمد سليم فرحات', room: '203' },
-                    { subject: 'تطبيقات حاسوب في الهندسة المدنية', instructor: 'غير محدد', room: '205' },
-                    { subject: 'نظريات ومبادئ التخطيط', instructor: 'غير محدد', room: '206' },
+                    { subject: 'تطبيقات حاسوب في الهندسة المدنية', instructor: 'أ. أحمد عبد السلام العيان', room: '205' },
+                    { subject: 'نظريات ومبادئ التخطيط', instructor: 'د. قراض', room: '206' },
                     { subject: 'تصميم معماري 2', instructor: 'د. فضل المولي', room: '207' },
                     { subject: 'اختياري', instructor: 'أ. نور الدين كريم', room: '208' },
                     { subject: 'ميكانيكا الموائع', instructor: 'أ. فرج الكيلاني', room: '209' },
@@ -666,18 +697,18 @@
                     { subject: 'ميكانيكا هندسية 1', instructor: 'أ. احمد كندي', room: '302' },
                     { subject: 'ميكانيكا هندسية 2', instructor: 'أ. احمد العيان', room: '303' },
                     { subject: 'مساحة 1', instructor: 'أ. محمد بن حليم', room: '304' },
-                    { subject: 'إشارات ونظم', instructor: 'م. محمد الشريف', room: '306' },
+                    { subject: 'إشارات ونظم', instructor: 'د. محمد الشريف', room: '306' },
                     { subject: 'مدخل إلى القرآن والسنة', instructor: 'د. حسين عون', room: '307' },
                     { subject: 'تقنيات ورش', instructor: 'أ. هشام بن طاهر', room: '308' },
                     { subject: 'تكنولوجيا الخرسانة', instructor: 'أ. عبد الله غويلة', room: '309' }
                 ],
                 '12:00 م - 2:00 م': [
-                    { subject: 'أساسيات دوائر إلكترونية', instructor: 'غير محدد', room: '202' },
+                    { subject: 'أساسيات دوائر إلكترونية', instructor: 'د. فتحي البكوش', room: '202' },
                     { subject: 'مقدمة في الروبوتات', instructor: 'أ. عبد السلام القهواجي', room: '203' },
                     { subject: 'تخطيط عمراني', instructor: 'د. قراض', room: '206' },
                     { subject: 'تصميم معماري 1', instructor: 'د. يوسف طاهر', room: '207' },
                     { subject: 'آلات كهربائية 1', instructor: 'أ. سليمان بن رحمة', room: '208' },
-                    { subject: 'تطبيقات حاسوب في الهندسة الكيميائية', instructor: 'غير محدد', room: '209' },
+                    { subject: 'تطبيقات حاسوب في الهندسة الكيميائية', instructor: 'أ. محمد الديب', room: '209' },
                     { subject: 'تشييد مباني', instructor: 'أ. محمد شكشك', room: '301' },
                     { subject: 'ميكانيكا هندسية 1', instructor: 'أ. ميلاد التونسي', room: '302' },
                     { subject: 'ميكانيكا هندسية 2', instructor: 'أ. احمد العيان', room: '303' },
@@ -718,7 +749,7 @@
                     { subject: 'ظواهر الانتقال', instructor: 'أ. خالد الجفايري', room: '308' }
                 ],
                 '10:00 ص - 12:00 م': [
-                    { subject: 'أساسيات دوائر إلكترونية', instructor: 'غير محدد', room: '202' },
+                    { subject: 'أساسيات دوائر إلكترونية', instructor: 'د. فتحي البكوش', room: '202' },
                     { subject: 'إدارة المناولة والتخزين', instructor: 'أ. هشام بن طاهر', room: '203' },
                     { subject: 'محاكاة عمليات كيميائية', instructor: 'أ. سالم اعبيد', room: '205' },
                     { subject: 'تصميم داخلي 1', instructor: 'أ. عيسى صوان', room: '206' },
@@ -751,7 +782,7 @@
                     { subject: 'رسم مدني', instructor: 'أ. محمد بن حليم', room: '205' },
                     { subject: 'رسم حر', instructor: 'أ. عيسى صوان', room: '206' },
                     { subject: 'مقدمة هندسة كيميائية 1', instructor: 'أ. فرج الكيلاني', room: '207' },
-                    { subject: 'مقدمة هندسة كيميائية 1', instructor: 'غير محدد', room: '209' }
+                    { subject: 'مقدمة هندسة كيميائية 2', instructor: 'أ. نور الدين كريم', room: '209' }
                 ],
                 '4:00 م - 6:00 م': [
                     { subject: 'انظمة تحكم متعددة المتغيرات', instructor: 'أ. أحمد العاتي', room: '208' }
@@ -912,15 +943,15 @@
                             dayHasMatchingSubjects = true;
                         }
                     } else {
-                         // إذا كان هناك فلترة بالوقت، نحتاج لنسخ الخانات الأخرى الفارغة لليوم
-                        if(filteredData[day] && !filteredData[day][timeSlot]){
-                           filteredData[day][timeSlot] = [];
-                        }
+                       // إذا كان هناك فلترة بالوقت، نحتاج لنسخ الخانات الأخرى الفارغة لليوم
+                       if(filteredData[day] && !filteredData[day][timeSlot]){
+                          filteredData[day][timeSlot] = [];
+                       }
                     }
                 });
                  if(!dayHasMatchingSubjects && (searchTerm || timeFilter)) {
-                    delete filteredData[day];
-                }
+                     delete filteredData[day];
+                 }
             });
             
             displaySchedule(filteredData);
@@ -954,5 +985,6 @@
         // تشغيل الموقع لأول مرة
         displaySchedule(scheduleData);
     </script>
-</body>
-</html>
+
+
+</body></html>
