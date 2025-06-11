@@ -4,7 +4,7 @@
     <title>الجدول الدراسي لكلية الهندسة</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Almarai:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -13,7 +13,7 @@
         }
 
         body {
-            font-family: 'Almarai', sans-serif;
+            font-family: 'Tajawal', sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             padding: 20px;
@@ -33,37 +33,35 @@
         }
 
         .header {
+            display: flex;
+            justify-content: center;
+            align-items: center;
             background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
             color: white;
-            padding: 30px;
-            text-align: center;
+            padding: 20px;
             position: relative;
             overflow: hidden;
+            text-align: center;
         }
 
-        .header::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
+        .header-text-container {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 15px 30px;
         }
-
-        .header h1 {
-            font-size: 2.5rem;
-            margin-bottom: 10px;
-            position: relative;
-            z-index: 1;
+        
+        .header-text-container h1 {
+            font-size: 1.8rem;
+            margin: 0;
             font-weight: 700;
         }
 
-        .header p {
-            font-size: 1.2rem;
+        .header-text-container .semester-info {
+            font-size: 1.1rem;
             opacity: 0.9;
-            position: relative;
-            z-index: 1;
+            margin-top: 10px;
         }
+
 
         .controls {
             padding: 30px;
@@ -96,7 +94,7 @@
             border: 2px solid #e9ecef;
             border-radius: 10px;
             font-size: 1rem;
-            font-family: 'Almarai', sans-serif;
+            font-family: 'Tajawal', sans-serif;
             transition: all 0.3s ease;
             background: white;
         }
@@ -303,17 +301,49 @@
         }
 
         .footer {
+            position: relative;
             text-align: center;
-            padding: 20px;
+            padding: 40px 20px;
             color: white;
-            font-size: 0.9rem;
+            font-size: 1rem;
+            overflow: hidden;
         }
 
+        .footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url('https://source.unsplash.com/1600x900/?abstract,gradient');
+            background-size: cover;
+            background-position: center;
+            filter: blur(5px);
+            transform: scale(1.1); /* Prevents blurred edges from showing */
+            z-index: -1;
+        }
+
+        .footer-content {
+            position: relative;
+            z-index: 1;
+            background: rgba(0, 0, 0, 0.4);
+            padding: 10px 20px;
+            border-radius: 10px;
+            display: inline-block;
+        }
+
+
         @media (max-width: 768px) {
-            .header h1 {
-                font-size: 1.8rem;
+            .header {
+                padding: 15px 20px;
             }
-            
+            .header-text-container h1 {
+                font-size: 1.5rem;
+            }
+            .header-text-container .semester-info {
+                font-size: 0.9rem;
+            }
             .filter-group {
                 flex-direction: column;
                 align-items: stretch;
@@ -327,14 +357,23 @@
                 padding: 10px 5px;
             }
         }
+
+        @media (max-width: 580px) {
+            .header {
+                flex-direction: column;
+                gap: 15px;
+            }
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <h1>الجامعة الأسمرية الإسلامية - كلية الهندسة</h1>
-            <p>الجدول الدراسي لفصل الربيع 2024-2025</p>
-            <p style="font-size: 0.9rem; margin-top: 10px;">آخر تحديث: 11 / 06 / 2025</p>
+            <div class="header-text-container">
+                <h1>الجامعة الأسمرية الإسلامية</h1>
+                <h1>كلية الهندسة</h1>
+                <p class="semester-info">الجدول الدراسي لفصل الربيع 2024-2025</p>
+            </div>
         </div>
 
         <div class="controls">
@@ -381,31 +420,7 @@
                         <th>4:00 - 6:00 م</th>
                     </tr>
                 </thead>
-                <tbody id="scheduleBody"><tr><td class="day-label-cell">السبت</td><td class="empty-cell"><div>-</div></td><td class="empty-cell"><div>-</div></td><td class="empty-cell"><div>-</div></td><td class="empty-cell"><div>-</div></td><td class="empty-cell"><div>-</div></td></tr><tr><td class="day-label-cell">الأحد</td><td class="empty-cell"><div>-</div></td><td class="empty-cell"><div>-</div></td><td class="empty-cell"><div>-</div></td><td class="empty-cell"><div>-</div></td><td class="empty-cell"><div>-</div></td></tr><tr><td class="day-label-cell">الإثنين</td><td>
-                                    <div class="subject-cell" data-day="الإثنين" data-timeslot="8:00 ص - 10:00 ص">
-                                        <div class="subject-name">تصميم فولاذ 1</div>
-                                        <div class="instructor-name">أ. أحمد العيان</div>
-                                        <div class="room-number">قاعة 202</div>
-                                    </div>
-                                </td><td class="empty-cell"><div>-</div></td><td class="empty-cell"><div>-</div></td><td class="empty-cell"><div>-</div></td><td class="empty-cell"><div>-</div></td></tr><tr><td class="day-label-cell">الثلاثاء</td><td class="empty-cell"><div>-</div></td><td class="empty-cell"><div>-</div></td><td>
-                                    <div class="subject-cell" data-day="الثلاثاء" data-timeslot="12:00 م - 2:00 م">
-                                        <div class="subject-name">نماذج ومجسمات</div>
-                                        <div class="instructor-name">د. يوسف طاهر</div>
-                                        <div class="room-number">قاعة 206</div>
-                                    </div>
-                                </td><td>
-                                    <div class="subject-cell" data-day="الثلاثاء" data-timeslot="2:00 م - 4:00 م">
-                                        <div class="subject-name">نماذج ومجسمات</div>
-                                        <div class="instructor-name">د. يوسف طاهر</div>
-                                        <div class="room-number">قاعة 206</div>
-                                    </div>
-                                
-                                    <div class="subject-cell" data-day="الثلاثاء" data-timeslot="2:00 م - 4:00 م">
-                                        <div class="subject-name">تصميم فولاذ 1</div>
-                                        <div class="instructor-name">أ. أحمد العيان</div>
-                                        <div class="room-number">قاعة 209</div>
-                                    </div>
-                                </td><td class="empty-cell"><div>-</div></td></tr><tr><td class="day-label-cell">الأربعاء</td><td class="empty-cell"><div>-</div></td><td class="empty-cell"><div>-</div></td><td class="empty-cell"><div>-</div></td><td class="empty-cell"><div>-</div></td><td class="empty-cell"><div>-</div></td></tr><tr><td class="day-label-cell">الخميس</td><td class="empty-cell"><div>-</div></td><td class="empty-cell"><div>-</div></td><td class="empty-cell"><div>-</div></td><td class="empty-cell"><div>-</div></td><td class="empty-cell"><div>-</div></td></tr></tbody>
+                <tbody id="scheduleBody"></tbody>
             </table>
         </div>
 
@@ -439,7 +454,9 @@
     </div>
 
     <footer class="footer">
-        جميع الحقوق محفوظة للطالب زياد أبولائطة © 2025
+        <div class="footer-content">
+            جميع الحقوق محفوظة للطالب زياد أبولائطة © 2025
+        </div>
     </footer>
 
     <script>
@@ -449,26 +466,26 @@
                 '8:00 ص - 10:00 ص': [
                     { subject: 'رياضة 1', instructor: 'أ. امحمد الصقع', room: '202' },
                     { subject: 'إهتزازات', instructor: 'أ. عبد السلام شرف', room: '203' },
-                    { subject: 'تصميم معماري 3', instructor: 'د. يوسف طاهر', room: '206' },
                     { subject: 'اسس تصميم', instructor: 'د. سالم شويخة', room: '207' },
                     { subject: 'كتابة تقارير فنية', instructor: 'أ. محمد أبوسنينة', room: '208' },
                     { subject: 'انتقال مادة 2', instructor: 'أ. محمد الديب', room: '301' },
-                    { subject: 'مساحة 2', instructor: 'أ. محمد بن حليم', room: '302' },
                     { subject: 'مقاومة مواد 1', instructor: 'أ. سالم خوجة', room: '303' },
-                    { subject: 'رياضة 2', instructor: 'أ. سالم عوينات', room: '308' }
+                    { subject: 'رياضة 2', instructor: 'أ. سالم عوينات', room: '308' },
+                    { subject: 'أساسيات دوائر إلكترونية', instructor: 'د. فتحي البكوش', room: '202' },
+                    { subject: 'مساحة جيوديسية', instructor: 'أ. محمد بن حليم', room: '302' }
                 ],
                 '10:00 ص - 12:00 م': [
                     { subject: 'رياضة 1', instructor: 'أ. امحمد الصقع', room: '202' },
                     { subject: 'نظريات عمارة', instructor: 'د. قراض', room: '203' },
                     { subject: 'برمجة حاسوب', instructor: 'أ. سالم إعبيد', room: '205' },
-                    { subject: 'تصميم معماري 3', instructor: 'د. يوسف طاهر', room: '206' },
                     { subject: 'اسس تصميم', instructor: 'د. سالم شويخة', room: '207' },
                     { subject: 'ميكانيكا هندسية 2', instructor: 'أ. احمد العيان', room: '208' },
                     { subject: 'ميكانيكا هندسية 1', instructor: 'أ. ميلاد التونسي', room: '209' },
                     { subject: 'هندسة غاز', instructor: 'أ. محمد الديب', room: '301' },
-                    { subject: 'مساحة جيوديسية', instructor: 'أ. محمد بن حليم', room: '302' },
                     { subject: 'ميكانيكا موائع 2', instructor: 'أ. سالم خوجة', room: '303' },
-                    { subject: 'رياضة 2', instructor: 'أ. سالم عوينات', room: '308' }
+                    { subject: 'رياضة 2', instructor: 'أ. سالم عوينات', room: '308' },
+                    { subject: 'مساحة جيوديسية', instructor: 'أ. محمد بن حليم', room: '302' },
+                    { subject: 'معالجات دقيقة 1', instructor: 'د. فتحي البكوش', room: '309' }
                 ],
                 '12:00 م - 2:00 م': [
                     { subject: 'اساسيات هـ كهربائية', instructor: 'أ. سالم الهمالي', room: '202' },
@@ -479,7 +496,9 @@
                     { subject: 'كيمياء فيزيائية 2', instructor: 'أ. فرج الكيلاني', room: '301' },
                     { subject: 'كيمياء فيزيائية 1', instructor: 'أ. نور الدين كريم', room: '302' },
                     { subject: 'هندسة تفاعلات 1', instructor: 'أ. خالد الجفايري', room: '307' },
-                    { subject: 'موضوعات مختارة في هندسة التحكم', instructor: 'أ. احمد العاتي', room: '308' }
+                    { subject: 'موضوعات مختارة في هندسة التحكم', instructor: 'أ. احمد العاتي', room: '308' },
+                    { subject: 'تأهيل منشآت', instructor: 'أ. محمد شكشك', room: '306' },
+                    { subject: 'تصميم معماري 4', instructor: 'د. قراض', room: '206' }
                 ],
                 '2:00 م - 4:00 م': [
                     { subject: 'الكترونيات رقمية', instructor: 'د. سالم الهمالي', room: '202' },
@@ -488,9 +507,10 @@
                     { subject: 'تصميم معماري 4', instructor: 'د. قراض', room: '206' },
                     { subject: 'هندسة انتاج 1', instructor: 'أ. سالم بلعيد', room: '209' },
                     { subject: 'ميكانيكا الموائع', instructor: 'أ. فرج الكيلاني', room: '301' },
-                    { subject: 'اختیاری', instructor: 'أ. نور الدين كريم', room: '302' },
+                    { subject: 'كيمياء', instructor: 'أ. نور الدين كريم', room: '302' },
                     { subject: 'هندسة انتاج 3', instructor: 'أ. ميلاد التونسي', room: '303' },
-                    { subject: 'انتقال مادة 1', instructor: 'أ. خالد الجفايري', room: '307' }
+                    { subject: 'انتقال مادة 1', instructor: 'أ. خالد الجفايري', room: '307' },
+                    { subject: 'أنظمة تحكم متعددة المتغيرات', instructor: 'أ. أحمد العاتي', room: '208' }
                 ],
                 '4:00 م - 6:00 م': [
                     { subject: 'معمل أنظمة تحكم', instructor: 'أ. احمد العاتي', room: '205' },
@@ -504,30 +524,31 @@
                     { subject: 'هندسة بيئة 1', instructor: 'أ. احمد كندي', room: '203' },
                     { subject: 'تصميم معماري 1', instructor: 'د. يوسف طاهر', room: '206' },
                     { subject: 'رياضة 2', instructor: 'أ. سالم عوينات', room: '208' },
-                    { subject: 'ديناميكا حرارية 2', instructor: 'أ. احمد العيان', room: '301' },
                     { subject: 'أحكام الفقه الإسلامي', instructor: 'د. عمر أبوحجر', room: '303' },
                     { subject: 'شبكة أنابيب', instructor: 'أ. عطية بن نجي', room: '304' },
                     { subject: 'تكنولوجيا الخرسانة', instructor: 'أ. عبد الله غويلة', room: '306' },
                     { subject: 'مدخل إلى القرآن والسنة', instructor: 'د. حسين عون', room: '307' },
                     { subject: 'فيزياء 2', instructor: 'د. مصطفى ديهوم', room: '308' },
-                    { subject: 'معالجة إشارات رقمية', instructor: 'د. محمد الشريف', room: '309' }
+                    { subject: 'معالجة إشارات رقمية', instructor: 'د. محمد الشريف', room: '309' },
+                    { subject: 'إلكترونيات تماثلية', instructor: 'أ. سالم الهمالي', room: '209' },
+                    { subject: 'تدفئة تبريد وتكييف 1', instructor: 'أ. منصور بن عروس', room: '203' },
+                    { subject: 'مقدمة في الروبوتات', instructor: 'أ. عبد السلام القهواجي', room: '302' },
+                    { subject: 'تطبيقات حاسوب', instructor: 'د. قراض', room: '205' }
                 ],
                 '10:00 ص - 12:00 م': [
                     { subject: 'لغة إنجليزية 1', instructor: 'أ. أحمد الاشهب', room: '202' },
                     { subject: 'ميكانيكا هندسية 1', instructor: 'أ. احمد كندي', room: '203' },
-                    { subject: 'محاكاة عمليات كيميائية', instructor: 'أ. سالم اعبيد', room: '205' },
                     { subject: 'تصميم معماري 1', instructor: 'د. يوسف طاهر', room: '206' },
                     { subject: 'دوائر 1', instructor: 'أ. سالم عوينات', room: '208' },
                     { subject: 'مبادئ هندسة كهربائية', instructor: 'أ. سالم الهمالي', room: '209' },
                     { subject: 'طرق تحليلات عددية', instructor: 'أ. سعد الغويل', room: '301' },
                     { subject: 'تصميم خرسانة 2', instructor: 'أ. أحمد العيان', room: '302' },
-                    { subject: 'تدفئة وتكييف وتبريد 1', instructor: 'أ. منصور بن عروس', room: '303' },
                     { subject: 'ميكانيكا موائع 1', instructor: 'م. معمر حميد', room: '304' },
-                    { subject: 'رسم هندسي', instructor: 'أ. عبد الرحمن قويرب', room: '305' },
                     { subject: 'تقنية ورش', instructor: 'د. احمد العيان', room: '306' },
                     { subject: 'مدخل إلى القرآن والسنة', instructor: 'د. حسين عون', room: '307' },
                     { subject: 'فيزياء 2', instructor: 'د. مصطفى ديهوم', room: '308' },
-                    { subject: 'نظم تحكم مثلى', instructor: 'د. محمد الشريف', room: '309' }
+                    { subject: 'نظم تحكم مثلى', instructor: 'د. محمد الشريف', room: '309' },
+                    { subject: 'كيمياء عضوية 1', instructor: 'أ. محمد الديب', room: '310' }
                 ],
                 '12:00 م - 2:00 م': [
                     { subject: 'خواص مواد', instructor: 'أ. طارق شميلة', room: '202' },
@@ -536,7 +557,6 @@
                     { subject: 'تطبيقات حاسوب في هـ الكيميائية', instructor: 'أ. محمد الديب', room: '208' },
                     { subject: 'لغة عربية', instructor: 'د. محمود ابوحجر', room: '209' },
                     { subject: 'إدارة المشاريع', instructor: 'م. محمد شكشك', room: '302' },
-                    { subject: 'رسم هندسي', instructor: 'أ. عبد الرحمن قويرب', room: '305' },
                     { subject: 'هندسة أساسات', instructor: 'أ. أيمن الكوت', room: '306' },
                     { subject: 'معمل موائع', instructor: 'أ. سالم خوجة', room: '307' },
                     { subject: 'أنظمة تحكم 2', instructor: 'أ. سالم إعبيد', room: '308' }
@@ -545,7 +565,6 @@
                     { subject: 'هندسة نقل ومرور', instructor: 'أ. طارق شميلة', room: '202' },
                     { subject: 'رياضة 4', instructor: 'أ. امحمد الصقع', room: '203' },
                     { subject: 'تطبيقات حاسوب', instructor: 'د. قراض', room: '205' },
-                    { subject: 'رسم هندسي', instructor: 'د. مصطفى أحمد شكشك', room: '206' },
                     { subject: 'كيمياء عضوية 1', instructor: 'أ. محمد الديب', room: '208' },
                     { subject: 'لغة عربية', instructor: 'د. محمود ابوحجر', room: '209' },
                     { subject: 'أنظمة تحكم حديثة', instructor: 'أ. سعد الغويل', room: '301' },
@@ -556,179 +575,174 @@
                     { subject: 'رياضة 1', instructor: 'د. علي فرحات', room: '309' }
                 ],
                 '4:00 م - 6:00 م': [
-                    { subject: 'رسم هندسي', instructor: 'د. مصطفى أحمد شكشك', room: '206' }
                 ]
             },
             'الإثنين': {
                 '8:00 ص - 10:00 ص': [
-                    { subject: 'تصميم فولاذ 1', instructor: 'أ. أحمد العيان', room: '202' },
+                    { subject: 'كهرومغناطيسيات 1', instructor: 'أ. سالم المزعوق', room: '202' },
                     { subject: 'أنظمة رقمية', instructor: 'د. فتحي البكوش', room: '203' },
-                    { subject: 'انشاء معماري 1', instructor: 'أ. عبد الله الشكري', room: '206' },
-                    { subject: 'انشاء معماري 3', instructor: 'د. فضل المولي', room: '207' },
+                    { subject: 'إنشاء معماري 1', instructor: 'أ. عبد الله الشكري', room: '206' },
                     { subject: 'رياضة 1', instructor: 'د. علي فرحات', room: '208' },
-                    { subject: 'ديناميكا حرارية', instructor: 'أ. فرج الكيلاني', room: '209' },
-                    { subject: 'مبادئ هندسة كيميائية', instructor: 'أ. نور الدين كريم', room: '302' },
+                    { subject: 'ديناميكا حرارية 1', instructor: 'أ. فرج الكيلاني', room: '209' },
+                    { subject: 'نظرية إنشاءات 1', instructor: 'أ. أحمد العيان', room: '301' },
+                    { subject: 'مبادئ هندسة كهربائية', instructor: 'أ. سالم الهمالي', room: '302' },
                     { subject: 'مقاومة مواد 1', instructor: 'أ. سالم خوجة', room: '303' },
-                    { subject: 'إدارة المناولة والتخزين', instructor: 'أ. هشام بن طاهر', room: '304' },
+                    { subject: 'رياضة 2', instructor: 'أ. سالم عوينات', room: '304' },
                     { subject: 'فيزياء 1', instructor: 'أ. محمد ابوسنينة', room: '306' },
                     { subject: 'كيمياء', instructor: 'د. محمد سليم فرحات', room: '307' },
-                    { subject: 'كهرومغناطيسيات 1', instructor: 'أ. سالم المزعوق', room: '308' },
-                    { subject: 'معالجات دقيقة', instructor: 'د. فتحي البكوش', room: '309' }
+                    { subject: 'السلامة في ص الكيميائية', instructor: 'د. محمد سليم فرحات', room: '308' },
+                    { subject: 'تصميم فولاذ 1', instructor: 'أ. أحمد العيان', room: '309' },
                 ],
                 '10:00 ص - 12:00 م': [
                     { subject: 'نظم تحكم مثلى', instructor: 'د. محمد الشريف', room: '202' },
-                    { subject: 'ميكانيكا هندسية', instructor: 'أ. رمضان البتي', room: '203' },
+                    { subject: 'ميكانيكا هندسية 1', instructor: 'أ. رمضان البتي', room: '203' },
                     { subject: 'برمجة حاسوب', instructor: 'أ. سالم إعبيد', room: '205' },
-                    { subject: 'انشاء معماري 1', instructor: 'أ. عبد الله الشكري', room: '206' },
-                    { subject: 'انشاء معماري 3', instructor: 'د. فضل المولي', room: '207' },
+                    { subject: 'إنشاء معماري 1', instructor: 'أ. عبد الله الشكري', room: '206' },
                     { subject: 'رياضة 1', instructor: 'د. علي فرحات', room: '208' },
-                    { subject: 'مقدمة هندسة كيميائية', instructor: 'أ. فرج الكيلاني', room: '209' },
+                    { subject: 'مقدمة هندسة كيميائية 1', instructor: 'أ. فرج الكيلاني', room: '209' },
                     { subject: 'معمل خرسانة', instructor: 'أ. طارق شميلة', room: '301' },
-                    { subject: 'أساسيات هـ. كهربائية', instructor: 'أ. سالم الهمالي', room: '302' },
+                    { subject: 'أساسيات هـ كهربائية ( للكيميائية )', instructor: 'أ. سالم الهمالي', room: '302' },
                     { subject: 'هيدرولوجيا', instructor: 'أ. سالم خوجة', room: '303' },
                     { subject: 'هندسة بيئة مصانع', instructor: 'أ. هشام بن طاهر', room: '304' },
                     { subject: 'فيزياء 1', instructor: 'أ. محمد ابوسنينة', room: '306' },
-                    { subject: 'مقدمة هندسة كيميائية 2', instructor: 'أ. نور الدين كريم', room: '307' },
-                    { subject: 'كيمياء', instructor: 'د. محمد سليم فرحات', room: '308' },
-                    { subject: 'نظم تحكم متشابهة', instructor: 'أ. سالم إعبيد', room: '309' }
+                    { subject: 'كيمياء', instructor: 'د. محمد سليم فرحات', room: '307' },
+                    { subject: 'رياضة 2', instructor: 'أ. سالم عوينات', room: '308' },
+                    { subject: 'تصميم خرسانة 1', instructor: 'أ. أحمد العيان', room: '309' },
                 ],
                 '12:00 م - 2:00 م': [
                     { subject: 'إشارات ونظم', instructor: 'د. محمد الشريف', room: '202' },
                     { subject: 'ميكانيكا تربة 1', instructor: 'أ. عبدالله غويلة', room: '203' },
                     { subject: 'برمجة حاسوب', instructor: 'أ. سالم إعبيد', room: '205' },
-                    { subject: 'انشاء معماري 2', instructor: 'أ. عبد الله الشكري', room: '206' },
-                    { subject: 'انشاء معماري 4', instructor: 'د. فضل المولي', room: '207' },
-                    { subject: 'ظواهر الانتقال', instructor: 'أ. خالد الجفايري', room: '208' },
-                    { subject: 'ميكانيكا الموائع', instructor: 'أ. فرج الكيلاني', room: '209' },
-                    { subject: 'رياضة 2', instructor: 'أ. سالم عوينات', room: '302' },
-                    { subject: 'هندسة قياسات', instructor: 'أ. هيثم السويحلي', room: '303' },
-                    { subject: 'آلات كهربائية 1', instructor: 'أ. سليمان بن رحمة', room: '304' },
-                    { subject: 'رياضة 1', instructor: 'د. علي فرحات', room: '308' },
-                    { subject: 'أنظمة تحكم 2', instructor: 'أ. سالم إعبيد', room: '309' }
+                    { subject: 'إنشاء معماري 2', instructor: 'أ. عبد الله الشكري', room: '206' },
+                    { subject: 'إنشاء معماري 3', instructor: 'د. فضل المولي', room: '207' },
+                    { subject: 'ظواهر الإntقال', instructor: 'أ. خالد الجفايري', room: '208' },
+                    { subject: 'رياضة 1', instructor: 'د. علي فرحات', room: '302' },
+                    { subject: 'هندسة قياسيات', instructor: 'أ. هيثم السويحلي', room: '303' },
+                    { subject: 'إدارة المناولة والتخزين', instructor: 'أ. هشام بن طاهر', room: '304' },
+                    { subject: 'آلات كهربائية 1', instructor: 'أ. سليمان بن رحمة', room: '307' },
+                    { subject: 'رياضة 2', instructor: 'أ. سالم عوينات', room: '308' },
                 ],
                 '2:00 م - 4:00 م': [
                     { subject: 'كتابة تقارير فنية', instructor: 'أ. فوزي جوان', room: '202' },
-                    { subject: 'جيو هندسة', instructor: 'أ. عبدالله غويلة', room: '203' },
+                    { subject: 'جيو هندسية', instructor: 'أ. عبدالله غويلة', room: '203' },
+                    { subject: 'معمل معالجات دقيقة', instructor: 'د. فتحي البكوش', room: '205' },
+                    { subject: 'إنشاء معماري 2', instructor: 'أ. عبد الله الشكري', room: '206' },
+                    { subject: 'إنشاء معماري 3', instructor: 'د. فضل المولي', room: '207' },
                     { subject: 'كيمياء عضوية 2', instructor: 'أ. خالد الجفايري', room: '208' },
-                    { subject: 'نظرية إنشاءات 2', instructor: 'أ. أحمد العيان', room: '301' },
-                    { subject: 'رياضة 1', instructor: 'د. علي فرحات', room: '308' }
+                    { subject: 'إهتزازات', instructor: 'أ. عبد السلام شرف', room: '209' },
+                    { subject: 'رياضة 1', instructor: 'د. علي فرحات', room: '302' },
                 ],
                 '4:00 م - 6:00 م': [
-                    { subject: 'تاريخ عمارة', instructor: 'د. فضل المولي', room: '202' }
+                    { subject: 'هندسة بيئة', instructor: 'أ. احمد كندي', room: '203' },
                 ]
             },
             'الثلاثاء': {
                 '8:00 ص - 10:00 ص': [
-                    { subject: 'مساحة 2', instructor: 'أ. محمد بن حليم', room: '202' },
+                    { subject: 'معالجات دقيقة 1', instructor: 'د. فتحي البكوش', room: '202' },
                     { subject: 'تصميم خرسانة 2', instructor: 'أ. أحمد العيان', room: '203' },
-                    { subject: 'معمل أنظمة تحكم', instructor: 'أ. احمد العاتي', room: '205' },
                     { subject: 'تصميم معماري 3', instructor: 'د. يوسف طاهر', room: '206' },
                     { subject: 'إظهار معماري', instructor: 'د. ناصر ابوجراد', room: '207' },
-                    { subject: 'إدارة الصيانة', instructor: 'أ. مصطفي حكومه', room: '208' },
+                    { subject: 'إنشاء معماري 3', instructor: 'د. فضل المولي', room: '208' },
                     { subject: 'شبكة أنابيب', instructor: 'أ. عطية بن نجي', room: '209' },
                     { subject: 'انتقال مادة 2', instructor: 'أ. محمد الديب', room: '301' },
-                    { subject: 'تصميم معماري 4', instructor: 'د. قراض', room: '305' },
+                    { subject: 'أسس تصميم', instructor: 'د. سالم شويخة', room: '305' },
                     { subject: 'لغة إنجليزية 2', instructor: 'أ. أحمد الاشهب', room: '306' },
                     { subject: 'العقيدة والفكر الإسلامي', instructor: 'أ. الفيتوري الطرلي', room: '307' },
                     { subject: 'رياضة 3', instructor: 'أ. امحمد الصقع', room: '308' },
-                    { subject: 'معالجات دقيقة', instructor: 'د. فتحي البكوش', room: '309' }
+                    { subject: 'معمل أنظمة تحكم', instructor: 'أ. احمد العاتي', room: '309' },
                 ],
                 '10:00 ص - 12:00 م': [
-                    { subject: 'مساحة 1', instructor: 'أ. محمد بن حليم', room: '202' },
+                    { subject: 'معمل دوائر 1', instructor: 'د. فتحي البكوش', room: '202' },
                     { subject: 'علم معادن', instructor: 'أ. مصطفي صوفيا', room: '203' },
-                    { subject: 'معمل دوائر 1', instructor: 'د. فتحي البكوش', room: '205' },
                     { subject: 'تصميم معماري 3', instructor: 'د. يوسف طاهر', room: '206' },
                     { subject: 'إظهار معماري', instructor: 'د. ناصر ابوجراد', room: '207' },
                     { subject: 'كيمياء عضوية 1', instructor: 'أ. محمد الديب', room: '301' },
-                    { subject: 'تصميم معماري 4', instructor: 'د. قراض', room: '305' },
+                    { subject: 'أسس تصميم', instructor: 'د. سالم شويخة', room: '305' },
                     { subject: 'لغة إنجليزية 2', instructor: 'أ. أحمد الاشهب', room: '306' },
-                    { subject: 'هندسة نقل وطرق', instructor: 'أ. طارق شميلة', room: '307' },
+                    { subject: 'هندسة نقل ومرور', instructor: 'أ. طارق شميلة', room: '307' },
                     { subject: 'رياضة 4', instructor: 'أ. امحمد الصقع', room: '308' },
-                    { subject: 'نظم تحكم متشابهة', instructor: 'أ. سالم إعبيد', room: '309' }
+                    { subject: 'مساحة 1', instructor: 'أ. محمد بن حليم', room: '309' },
                 ],
                 '12:00 م - 2:00 م': [
                     { subject: 'مدخل إلى القرآن والسنة', instructor: 'د. حسين عون', room: '202' },
                     { subject: 'فيزياء 2', instructor: 'د. مصطفى ديهوم', room: '203' },
-                    { subject: 'نماذج ومجسمات', instructor: 'د. يوسف طاهر', room: '206' },
-                    { subject: 'إدارة المشروعات الهندسية', instructor: 'م. محمد شكشك', room: '209' },
-                    { subject: 'طرق تحليلات عددية', instructor: 'أ. سعد الغويل', room: '208' },
+                    { subject: 'فيزياء 1', instructor: 'أ. محمد ابوسنينة', room: '208' },
+                    { subject: 'إدارة المشاريع الهندسية', instructor: 'م. محمد شكشك', room: '209' },
+                    { subject: 'تصميم معماري 4', instructor: 'د. قراض', room: '305' },
                     { subject: 'ميكانيكا موائع 2', instructor: 'أ. سالم خوجة', room: '306' },
                     { subject: 'خواص مواد', instructor: 'أ. طارق شميلة', room: '307' },
                     { subject: 'لغة عربية', instructor: 'د. محمود ابوحجر', room: '308' },
-                    { subject: 'أنظمة تحكم 2', instructor: 'أ. سالم إعبيد', room: '309' }
                 ],
                 '2:00 م - 4:00 م': [
                     { subject: 'مدخل إلى القرآن والسنة', instructor: 'د. حسين عون', room: '202' },
                     { subject: 'فيزياء 2', instructor: 'د. مصطفى ديهوم', room: '203' },
                     { subject: 'نماذج ومجسمات', instructor: 'د. يوسف طاهر', room: '206' },
                     { subject: 'رسم هندسي', instructor: 'د. مصطفى أحمد شكشك', room: '207' },
-                    { subject: 'فيزياء 1', instructor: 'أ. محمد ابوسنينة', room: '208' },
-                    { subject: 'تصميم فولاذ 1', instructor: 'أ. أحمد العيان', room: '209' },
+                    { subject: 'طرق تحليلات عددية', instructor: 'أ. سعد الغويل', room: '208' },
+                    { subject: 'ميكانيكا الموائع', instructor: 'أ. فرج الكيلاني', room: '209' },
+                    { subject: 'تصميم معماري 4', instructor: 'د. قراض', room: '305' },
                     { subject: 'هندسة وصفية', instructor: 'أ. سالم خوجة', room: '306' },
-                    { subject: 'لغة عربية', instructor: 'د. محمود ابوحجر', room: '308' }
+                    { subject: 'ميكانيكا الموائع', instructor: 'أ. فرج الكيلاني', room: '307' }, 
+                    { subject: 'لغة عربية', instructor: 'د. محمود ابوحجر', room: '308' },
                 ],
                 '4:00 م - 6:00 م': [
-                    { subject: 'رسم هندسي', instructor: 'د. مصطفى أحمد شكشك', room: '207' }
+                    { subject: 'نماذج ومجسمات', instructor: 'د. يوسف طاهر', room: '206' },
+                    { subject: 'رسم هندسي', instructor: 'د. مصطفى أحمد شكشك', room: '207' },
                 ]
             },
             'الأربعاء': {
                 '8:00 ص - 10:00 ص': [
                     { subject: 'هندسة تفاعلات 1', instructor: 'أ. خالد الجفايري', room: '202' },
-                    { subject: 'إدارة الصيانة', instructor: 'أ. مصطفي حكومه', room: '203' },
-                    { subject: 'تطبيقات حاسوب في الهندسة المدنية', instructor: 'أ. أحمد عبد السلام العيان', room: '205' },
+                    { subject: 'ميكانيكا هندسية 1', instructor: 'أ. رمضان البتي', room: '203' },
+                    { subject: 'تطبيقات حاسوب في هـ المدنية', instructor: 'أ. أحمد عبد السلام العيان', room: '205' },
+                    { subject: 'إدارة الصيانة', instructor: 'أ. مصطفي حكومه', room: '206' },
                     { subject: 'تصميم معماري 2', instructor: 'د. فضل المولي', room: '207' },
                     { subject: 'كيمياء فيزيائية 1', instructor: 'أ. نور الدين كريم', room: '208' },
                     { subject: 'كيمياء فيزيائية 2', instructor: 'أ. فرج الكيلاني', room: '209' },
-                    { subject: 'هندسة بيئة 1', instructor: 'أ. احمد كندي', room: '302' },
-                    { subject: 'ميكانيكا هندسية 1', instructor: 'أ. رمضان البتي', room: '303' },
-                    { subject: 'معالجة إشارة رقمية', instructor: 'د. محمد الشريف', room: '306' },
-                    { subject: 'تقنيات ورش', instructor: 'أ. هشام بن طاهر', room: '308' },
-                    { subject: 'ميكانيكا تربة 1', instructor: 'أ. عبد الله غويلة', room: '309' }
+                    { subject: 'معالجة إشارة رقمية', instructor: 'د. محمد الشريف', room: '304' },
+                    { subject: 'إنشاء معماري 3', instructor: 'د. فضل المولي', room: '306' },
+                    { subject: 'تقنية ورش', instructor: 'أ. هشام بن طاهر', room: '308' },
+                    { subject: 'تكنولوجيا الخرسانة', instructor: 'أ. عبد الله غويلة', room: '309' },
                 ],
                 '10:00 ص - 12:00 م': [
                     { subject: 'انتقال مادة 1', instructor: 'أ. خالد الجفايري', room: '202' },
-                    { subject: 'كيمياء', instructor: 'د. محمد سليم فرحات', room: '203' },
-                    { subject: 'تطبيقات حاسوب في الهندسة المدنية', instructor: 'أ. أحمد عبد السلام العيان', room: '205' },
+                    { subject: 'ميكانيكا هندسية 1', instructor: 'أ. احمد كندي', room: '203' },
+                    { subject: 'تطبيقات حاسوب في هـ المدنية', instructor: 'أ. أحمد عبد السلام العيان', room: '205' },
                     { subject: 'نظريات ومبادئ التخطيط', instructor: 'د. قراض', room: '206' },
                     { subject: 'تصميم معماري 2', instructor: 'د. فضل المولي', room: '207' },
-                    { subject: 'اختياري', instructor: 'أ. نور الدين كريم', room: '208' },
+                    { subject: 'كيمياء', instructor: 'د. محمد سليم فرحات', room: '208' },
                     { subject: 'ميكانيكا الموائع', instructor: 'أ. فرج الكيلاني', room: '209' },
-                    { subject: 'اهتزازات', instructor: 'أ. عبد السلام شرف', room: '301' },
-                    { subject: 'ميكانيكا هندسية 1', instructor: 'أ. احمد كندي', room: '302' },
+                    { subject: 'مقدمة في الروبوتات', instructor: 'أ. عبد السلام القهواجي', room: '301' },
                     { subject: 'ميكانيكا هندسية 2', instructor: 'أ. احمد العيان', room: '303' },
-                    { subject: 'مساحة 1', instructor: 'أ. محمد بن حليم', room: '304' },
-                    { subject: 'إشارات ونظم', instructor: 'د. محمد الشريف', room: '306' },
+                    { subject: 'إشارات ونظم', instructor: 'د. محمد الشريف', room: '304' },
+                    { subject: 'مساحة 1', instructor: 'أ. محمد بن حليم', room: '306' },
                     { subject: 'مدخل إلى القرآن والسنة', instructor: 'د. حسين عون', room: '307' },
-                    { subject: 'تقنيات ورش', instructor: 'أ. هشام بن طاهر', room: '308' },
-                    { subject: 'تكنولوجيا الخرسانة', instructor: 'أ. عبد الله غويلة', room: '309' }
+                    { subject: 'تقنية ورش', instructor: 'أ. هشام بن طاهر', room: '308' },
+                    { subject: 'ميكانيكا تربة 1', instructor: 'أ. عبد الله غويلة', room: '309' },
                 ],
                 '12:00 م - 2:00 م': [
-                    { subject: 'أساسيات دوائر إلكترونية', instructor: 'د. فتحي البكوش', room: '202' },
-                    { subject: 'مقدمة في الروبوتات', instructor: 'أ. عبد السلام القهواجي', room: '203' },
+                    { subject: 'هندسة بيئة 1', instructor: 'أ. احمد كندي', room: '203' },
                     { subject: 'تخطيط عمراني', instructor: 'د. قراض', room: '206' },
                     { subject: 'تصميم معماري 1', instructor: 'د. يوسف طاهر', room: '207' },
-                    { subject: 'آلات كهربائية 1', instructor: 'أ. سليمان بن رحمة', room: '208' },
                     { subject: 'تطبيقات حاسوب في الهندسة الكيميائية', instructor: 'أ. محمد الديب', room: '209' },
-                    { subject: 'تشييد مباني', instructor: 'أ. محمد شكشك', room: '301' },
+                    { subject: 'تشييد مباني', instructor: 'م. محمد شكشك', room: '301' },
                     { subject: 'ميكانيكا هندسية 1', instructor: 'أ. ميلاد التونسي', room: '302' },
                     { subject: 'ميكانيكا هندسية 2', instructor: 'أ. احمد العيان', room: '303' },
-                    { subject: 'مساحة جيوديسية', instructor: 'أ. محمد بن حليم', room: '304' },
                     { subject: 'تصميم معماري 2', instructor: 'د. فضل المولي', room: '305' },
-                    { subject: 'هندسة إنتاج 1', instructor: 'أ. أسالم بلعيد', room: '306' },
-                    { subject: 'فيزياء 1', instructor: 'أ. محمد ابوسنينة', room: '308' },
-                    { subject: 'دوائر 1', instructor: 'أ. سالم عوينات', room: '309' }
+                    { subject: 'هندسة انتاج 1', instructor: 'أ. سالم بلعيد', room: '307' },
+                    { subject: 'دوائر 1', instructor: 'أ. سالم عوينات', room: '308' },
+                    { subject: 'فيزياء 1', instructor: 'أ. محمد ابوسنينة', room: '309' },
                 ],
                 '2:00 م - 4:00 م': [
-                    { subject: 'معالجات دقيقة', instructor: 'د. فتحي البكوش', room: '202' },
+                    { subject: 'مساحة 2', instructor: 'أ. محمد بن حليم', room: '202' },
                     { subject: 'رياضة 1', instructor: 'د. علي فرحات', room: '203' },
-                    { subject: 'تخطيط عمراني', instructor: 'د. قراض', room: '206' },
+                    { subject: 'تصميم معماري 1', instructor: 'د. يوسف طاهر', room: '207' },
                     { subject: 'لغة إنجليزية 2', instructor: 'أ. أحمد الاشهب', room: '208' },
                     { subject: 'هندسة غاز', instructor: 'أ. محمد الديب', room: '209' },
-                    { subject: 'تأهيل منشآت', instructor: 'أ. محمد شكشك', room: '301' },
-                    { subject: 'هندسة إنتاج 3', instructor: 'أ. ميلاد التونسي', room: '302' },
+                    { subject: 'تأهيل منشآت', instructor: 'م. محمد شكشك', room: '301' },
+                    { subject: 'هندسة انتاج 3', instructor: 'أ. ميلاد التونسي', room: '302' },
                     { subject: 'تصميم معماري 2', instructor: 'د. فضل المولي', room: '305' },
-                    { subject: 'ميكانيكا هندسية 1', instructor: 'أ. رمضان البتي', room: '306' },
-                    { subject: 'رياضة 2', instructor: 'أ. سالم عوينات', room: '309' }
+                    { subject: 'ميكانيكا هندسية 1', instructor: 'أ. رمضان البتي', room: '307' },
                 ],
                 '4:00 م - 6:00 م': []
             },
@@ -737,7 +751,6 @@
                     { subject: 'أنظمة رقمية', instructor: 'د. فتحي البكوش', room: '202' },
                     { subject: 'هندسة بيئة مصانع', instructor: 'أ. هشام بن طاهر', room: '203' },
                     { subject: 'تصميم داخلي 1', instructor: 'أ. عيسى صوان', room: '206' },
-                    { subject: 'تدفئة وتكييف وتبريد 1', instructor: 'أ. منصور بن عروس', room: '207' },
                     { subject: 'إحصاء', instructor: 'أ. محمد عبد الله اصميدة', room: '208' },
                     { subject: 'هيدرولوجيا', instructor: 'أ. سالم خوجة', room: '209' },
                     { subject: 'كهرومغناطيسيات 1', instructor: 'أ. سالم المزعوق', room: '301' },
@@ -789,6 +802,7 @@
                 ]
             }
         };
+
 
         // متغيرات للإحصائيات
         let totalSubjects = new Set();
@@ -945,12 +959,12 @@
                     } else {
                        // إذا كان هناك فلترة بالوقت، نحتاج لنسخ الخانات الأخرى الفارغة لليوم
                        if(filteredData[day] && !filteredData[day][timeSlot]){
-                          filteredData[day][timeSlot] = [];
+                         filteredData[day][timeSlot] = [];
                        }
                     }
                 });
                  if(!dayHasMatchingSubjects && (searchTerm || timeFilter)) {
-                     delete filteredData[day];
+                       delete filteredData[day];
                  }
             });
             
