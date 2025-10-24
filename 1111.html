@@ -3,423 +3,286 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>الجدول الدراسي الذكي - كلية الهندسة</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+    <title>الجدول الدراسي الذكي - عرض مباشر</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --bg-color: #0f172a;
+            --card-bg: rgba(255, 255, 255, 0.05);
+            --primary-color: #3b82f6;
+            --secondary-color: #8b5cf6;
+            --success-color: #10b981;
+            --danger-color: #ef4444;
+            --text-color: #e2e8f0;
+            --text-muted-color: #94a3b8;
+        }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
 
-        :root {
-            --bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
-            --primary-color: #3b82f6;
-            --secondary-color: #8b5cf6;
-            --accent-color: #ec4899;
-            --success-color: #10b981;
-            --warning-color: #f59e0b;
-        }
-
         body {
             font-family: 'Cairo', sans-serif;
-            background: var(--bg-gradient);
+            background-color: var(--bg-color);
+            color: var(--text-color);
             min-height: 100vh;
-            padding: 40px 20px;
+            padding: 20px;
             overflow-x: hidden;
-            position: relative;
-        }
-
-        /* خلفية متحركة */
-        body::before {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: 
-                radial-gradient(circle at 20% 50%, rgba(59, 130, 246, 0.15) 0%, transparent 50%),
-                radial-gradient(circle at 80% 80%, rgba(168, 85, 247, 0.15) 0%, transparent 50%);
-            pointer-events: none;
-            animation: backgroundShift 20s ease infinite alternate;
-        }
-
-        @keyframes backgroundShift {
-            from { transform: scale(1); }
-            to { transform: scale(1.1); }
         }
 
         .container {
-            max-width: 1600px;
+            max-width: 1200px;
             margin: 0 auto;
-            position: relative;
-            z-index: 1;
         }
 
-        /* الهيدر */
+        /* Header */
         .header {
             text-align: center;
-            margin-bottom: 60px;
-            animation: slideDown 1s ease-out;
-        }
-
-        @keyframes slideDown {
-            from {
-                transform: translateY(-100px);
-                opacity: 0;
-            }
-            to {
-                transform: translateY(0);
-                opacity: 1;
-            }
+            margin-bottom: 40px;
+            animation: fadeInDown 1s ease-out;
         }
 
         .main-title {
-            font-size: 4em;
+            font-size: 2.5em;
             font-weight: 900;
-            background: linear-gradient(90deg, #3b82f6, #8b5cf6, #ec4899, #3b82f6);
-            background-size: 200% auto;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            animation: gradientFlow 4s linear infinite;
-            margin-bottom: 20px;
-            text-shadow: 0 0 40px rgba(59, 130, 246, 0.3);
-        }
-
-        @keyframes gradientFlow {
-            0% { background-position: 0% center; }
-            100% { background-position: 200% center; }
+            margin-bottom: 10px;
         }
 
         .date-info {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(20px);
-            border: 2px solid rgba(255, 255, 255, 0.2);
-            border-radius: 50px;
-            padding: 15px 40px;
-            display: inline-flex;
-            align-items: center;
-            gap: 15px;
-            color: white;
-            font-size: 1.4em;
-            font-weight: 700;
-            animation: glow 2s ease-in-out infinite;
+            color: var(--text-muted-color);
+            font-size: 1.1em;
+            font-weight: 600;
         }
 
-        @keyframes glow {
-            0%, 100% {
-                box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
-            }
-            50% {
-                box-shadow: 0 0 40px rgba(59, 130, 246, 0.6);
-            }
-        }
-
-        /* الساعة */
+        /* Clock */
         .clock {
-            position: fixed;
-            top: 30px;
-            left: 30px;
-            background: rgba(0, 0, 0, 0.4);
-            backdrop-filter: blur(20px);
-            padding: 25px 35px;
-            border-radius: 20px;
-            border: 2px solid rgba(255, 255, 255, 0.15);
-            z-index: 100;
-            animation: fadeIn 1s ease-out;
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateX(-50px);
-            }
-            to {
-                opacity: 1;
-                transform: translateX(0);
-            }
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            padding: 15px 25px;
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+            margin-bottom: 30px;
         }
 
         .clock-time {
-            font-size: 2.8em;
-            font-weight: 900;
+            font-size: 2.5em;
+            font-weight: 700;
             color: white;
-            text-align: center;
-            font-variant-numeric: tabular-nums;
-            letter-spacing: 2px;
         }
 
-        .clock-label {
-            text-align: center;
-            color: rgba(255, 255, 255, 0.7);
-            font-size: 0.9em;
-            margin-top: 5px;
-        }
-
-        /* شبكة البطاقات */
+        /* Cards Grid */
         .cards-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
-            gap: 35px;
-            margin-top: 40px;
-            min-height: 400px;
+            grid-template-columns: 1fr;
+            gap: 20px;
+            min-height: 300px;
         }
 
-        /* البطاقة الرئيسية */
+        /* Lecture Card */
         .lecture-card {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(30px);
-            border-radius: 30px;
-            padding: 0;
-            border: 2px solid rgba(255, 255, 255, 0.1);
+            background: var(--card-bg);
+            backdrop-filter: blur(15px);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
             overflow: hidden;
+            transition: all 0.4s ease;
+            animation: fadeInUp 0.5s ease-out backwards;
             position: relative;
-            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-            animation: cardAppear 0.8s ease-out backwards;
-            cursor: pointer;
         }
 
-        @keyframes cardAppear {
-            from {
-                opacity: 0;
-                transform: translateY(50px) scale(0.9);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0) scale(1);
-            }
+        /* Card States */
+        .lecture-card.active {
+            border-color: var(--success-color);
+            box-shadow: 0 0 30px rgba(16, 185, 129, 0.4);
         }
 
-        .lecture-card:hover {
-            transform: translateY(-15px) scale(1.02);
-            border-color: rgba(59, 130, 246, 0.5);
-            box-shadow: 0 30px 80px rgba(59, 130, 246, 0.4);
-            background: rgba(255, 255, 255, 0.08);
+        .lecture-card.past {
+            background: rgba(15, 23, 42, 0.5);
+            opacity: 0.6;
         }
 
-        /* شريط الألوان العلوي */
+        .lecture-card.past .time-badge {
+            background: #475569;
+        }
+
+        .lecture-card.past .lecture-name,
+        .lecture-card.past .detail-row {
+            color: #64748b;
+        }
+        
+        .lecture-card.past .detail-icon {
+             background: rgba(100, 116, 139, 0.2);
+        }
+
+        /* Card Header */
         .card-header {
-            height: 8px;
-            background: linear-gradient(90deg, #3b82f6, #8b5cf6, #ec4899, #f59e0b);
-            background-size: 300% 100%;
-            animation: headerGradient 3s linear infinite;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
 
-        @keyframes headerGradient {
-            0% { background-position: 0% 50%; }
-            100% { background-position: 300% 50%; }
-        }
-
-        /* محتوى البطاقة */
-        .card-body {
-            padding: 35px;
-        }
-
-        /* الوقت */
         .time-badge {
             display: inline-flex;
             align-items: center;
-            gap: 10px;
-            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            gap: 8px;
+            background: var(--primary-color);
             color: white;
-            padding: 12px 25px;
+            padding: 8px 16px;
             border-radius: 50px;
-            font-size: 1.4em;
-            font-weight: 800;
-            margin-bottom: 25px;
-            box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4);
+            font-size: 1.1em;
+            font-weight: 700;
         }
 
-        .lecture-card.active .time-badge {
-            background: linear-gradient(135deg, #10b981, #059669);
-            animation: activeShine 1.5s ease-in-out infinite;
-        }
-
-        @keyframes activeShine {
-            0%, 100% {
-                box-shadow: 0 8px 25px rgba(16, 185, 129, 0.4);
-            }
-            50% {
-                box-shadow: 0 8px 40px rgba(16, 185, 129, 0.7);
-            }
-        }
-
-        /* حالة مباشر */
         .live-indicator {
             display: none;
-            position: absolute;
-            top: 25px;
-            left: 25px;
-            background: #ef4444;
-            color: white;
-            padding: 10px 20px;
-            border-radius: 50px;
-            font-size: 1em;
-            font-weight: 700;
-            animation: blink 1.5s ease-in-out infinite;
-            z-index: 10;
-        }
-
-        .lecture-card.active .live-indicator {
-            display: flex;
             align-items: center;
             gap: 8px;
+            color: var(--success-color);
+            font-weight: 700;
         }
-
-        @keyframes blink {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
+        
+        .lecture-card.active .live-indicator {
+            display: flex;
         }
 
         .live-dot {
             width: 10px;
             height: 10px;
-            background: white;
+            background: var(--success-color);
             border-radius: 50%;
-            animation: pulse 1.5s ease-in-out infinite;
+            animation: pulse 1.5s infinite;
         }
 
-        @keyframes pulse {
-            0%, 100% {
-                transform: scale(1);
-                opacity: 1;
-            }
-            50% {
-                transform: scale(1.3);
-                opacity: 0.7;
-            }
-        }
-
-        /* المحاضرات داخل البطاقة */
-        .lectures-list {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
+        /* Card Body */
+        .card-body {
+            padding: 20px;
+            display: grid;
+            gap: 15px;
         }
 
         .lecture-item {
             background: rgba(0, 0, 0, 0.2);
-            border-radius: 20px;
-            padding: 25px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .lecture-item::before {
-            content: '';
-            position: absolute;
-            right: 0;
-            top: 0;
-            width: 6px;
-            height: 100%;
-            background: linear-gradient(180deg, #3b82f6, #8b5cf6, #ec4899);
-        }
-
-        .lecture-item:hover {
-            background: rgba(0, 0, 0, 0.3);
-            transform: translateX(-10px);
-            border-color: rgba(59, 130, 246, 0.3);
+            border-radius: 15px;
+            padding: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
         }
 
         .lecture-name {
-            font-size: 1.8em;
-            font-weight: 800;
-            color: white;
-            margin-bottom: 15px;
-            line-height: 1.4;
+            font-size: 1.4em;
+            font-weight: 700;
+            margin-bottom: 10px;
         }
 
         .lecture-details {
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            gap: 10px;
         }
 
         .detail-row {
             display: flex;
             align-items: center;
-            gap: 15px;
-            color: rgba(255, 255, 255, 0.9);
-            font-size: 1.2em;
+            gap: 10px;
+            font-size: 1em;
             font-weight: 600;
         }
 
         .detail-icon {
-            width: 45px;
-            height: 45px;
-            background: rgba(59, 130, 246, 0.2);
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.4em;
-            flex-shrink: 0;
+            font-size: 1.2em;
         }
 
-        /* شريط التقدم */
+        /* No Lectures Message */
+        #noLecturesMessage {
+            color: var(--text-muted-color);
+            text-align: center;
+            font-size: 1.5em;
+            font-weight: 600;
+            padding: 50px;
+            display: none;
+        }
+
+        /* Progress Bar */
         .progress-container {
             position: fixed;
             bottom: 0;
             left: 0;
             right: 0;
-            height: 8px;
+            height: 6px;
             background: rgba(0, 0, 0, 0.3);
-            z-index: 100;
         }
 
         .progress-bar {
             height: 100%;
-            background: linear-gradient(90deg, #10b981, #3b82f6, #8b5cf6);
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
             width: 0%;
             transition: width 0.5s ease;
         }
+        
+        /* Animations */
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
 
-        /* رسالة عدم وجود محاضرات */
-        #noLecturesMessage {
-            color: white;
-            text-align: center;
-            font-size: 2em;
-            font-weight: 700;
-            padding: 50px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 20px;
-            display: none; /* مخفي بشكل افتراضي */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+        }
+        
+        /* Desktop View */
+        @media (min-width: 768px) {
+            body {
+                padding: 40px;
+            }
+            .cards-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .main-title {
+                font-size: 3.5em;
+            }
+        }
+        
+        @media (min-width: 1200px) {
+            .cards-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
         }
     </style>
 </head>
 <body>
-    <!-- الساعة -->
-    <div class="clock">
-        <div class="clock-time" id="currentTime">00:00:00</div>
-        <div class="clock-label">الوقت الحالي</div>
-    </div>
-
     <div class="container">
-        <!-- الهيدر -->
-        <div class="header">
-            <h1 class="main-title" id="mainTitle">📚 الجدول الدراسي</h1>
-            <div class="date-info" id="dateInfo">
-                <span>🎓</span>
-                <span>كلية الهندسة | فصل الخريف 2025-2026</span>
-            </div>
+        <header class="header">
+            <h1 class="main-title" id="mainTitle">الجدول الدراسي</h1>
+            <p class="date-info" id="dateInfo">كلية الهندسة</p>
+        </header>
+
+        <div class="clock">
+            <div class="clock-time" id="currentTime">00:00:00</div>
         </div>
 
-        <!-- شبكة البطاقات -->
         <div class="cards-grid" id="cardsGrid">
-            <!-- البطاقات سيتم إنشاؤها هنا بواسطة JavaScript -->
+            <!-- Cards will be generated here by JavaScript -->
         </div>
         
-        <!-- رسالة لعدم وجود محاضرات -->
         <div id="noLecturesMessage">
-            🎉 لا توجد محاضرات لهذا اليوم. استمتع بيومك! 🎉
+            🎉 لا توجد محاضرات لهذا اليوم. استمتع بيومك!
         </div>
     </div>
 
-    <!-- شريط التقدم -->
     <div class="progress-container">
         <div class="progress-bar" id="progressBar"></div>
     </div>
@@ -468,19 +331,13 @@
                 { time: '14:00 - 16:00', icon: '🕑', classes: [{ name: 'تصميم خرسانة 3', teacher: 'محمد شكشك', room: '306' }, { name: 'هيدرولوجيا', teacher: 'أ. سالم خوجة', room: '307' }] },
                 { time: '16:00 - 18:00', icon: '🕓', classes: [{ name: 'بحوث العمليات', teacher: 'د. علي شكشك', room: '310' }, { name: 'أنظمة تحكم حاسوبية', teacher: 'د. سعد الغويل', room: '305' }] }
             ],
-            friday: [] // يوم عطلة
+            friday: []
         };
 
-        // تحديث الساعة
         function updateClock() {
-            const now = new Date();
-            const hours = String(now.getHours()).padStart(2, '0');
-            const minutes = String(now.getMinutes()).padStart(2, '0');
-            const seconds = String(now.getSeconds()).padStart(2, '0');
-            document.getElementById('currentTime').textContent = `${hours}:${minutes}:${seconds}`;
+            document.getElementById('currentTime').textContent = new Date().toLocaleTimeString('ar-EG');
         }
 
-        // إنشاء بطاقات اليوم
         function generateDaySchedule() {
             const now = new Date();
             const dayNames = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
@@ -492,31 +349,33 @@
             const todayKey = dayNames[now.getDay()];
             const todayArabicName = arabicDayNames[todayKey];
 
-            document.getElementById('mainTitle').textContent = `📚 جدول يوم ${todayArabicName}`;
+            document.getElementById('mainTitle').textContent = `جدول يوم ${todayArabicName}`;
+            document.getElementById('dateInfo').textContent = new Date().toLocaleDateString('ar-EG', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
             
             const daySchedule = scheduleData[todayKey];
             const cardsGrid = document.getElementById('cardsGrid');
-            cardsGrid.innerHTML = ''; // إفراغ الشبكة
+            cardsGrid.innerHTML = '';
 
             if (!daySchedule || daySchedule.length === 0) {
                 document.getElementById('noLecturesMessage').style.display = 'block';
+                updateProgress(true); // Set progress to 100% on off days
                 return;
             }
             
             document.getElementById('noLecturesMessage').style.display = 'none';
 
-            daySchedule.forEach((period, index) => {
+            // Classify and sort lectures
+            const sortedSchedule = classifyAndSort(daySchedule);
+
+            sortedSchedule.forEach((period, index) => {
                 const card = document.createElement('div');
                 card.className = 'lecture-card';
                 card.style.animationDelay = `${index * 0.1}s`;
-
-                // استخراج وقت البدء والانتهاء
-                const [startTime] = period.time.split(' - ');
-                const [startHour] = startTime.split(':').map(Number);
-                const endHour = startHour + 2;
-
-                card.dataset.start = startHour;
-                card.dataset.end = endHour;
+                
+                let cardClass = '';
+                if(period.status === 'active') cardClass = 'active';
+                if(period.status === 'past') cardClass = 'past';
+                card.classList.add(cardClass);
 
                 let lecturesHTML = '';
                 period.classes.forEach(cls => {
@@ -525,11 +384,11 @@
                             <div class="lecture-name">${cls.name}</div>
                             <div class="lecture-details">
                                 <div class="detail-row">
-                                    <div class="detail-icon">👨‍🏫</div>
+                                    <span class="detail-icon">👨‍🏫</span>
                                     <span>${cls.teacher}</span>
                                 </div>
                                 <div class="detail-row">
-                                    <div class="detail-icon">📍</div>
+                                    <span class="detail-icon">📍</span>
                                     <span>قاعة ${cls.room}</span>
                                 </div>
                             </div>
@@ -538,74 +397,74 @@
                 });
 
                 card.innerHTML = `
-                    <div class="card-header"></div>
-                    <div class="live-indicator"><div class="live-dot"></div><span>مباشر الآن</span></div>
-                    <div class="card-body">
+                    <div class="card-header">
                         <div class="time-badge">
                             <span>${period.icon}</span>
                             <span>${period.time}</span>
                         </div>
-                        <div class="lectures-list">
-                            ${lecturesHTML}
+                        <div class="live-indicator">
+                            <div class="live-dot"></div>
+                            <span>مباشر الآن</span>
                         </div>
+                    </div>
+                    <div class="card-body">
+                        ${lecturesHTML}
                     </div>
                 `;
                 cardsGrid.appendChild(card);
             });
-            
-            highlightActiveCard();
+            updateProgress();
         }
 
-        // تمييز البطاقة النشطة
-        function highlightActiveCard() {
+        function classifyAndSort(daySchedule) {
             const now = new Date();
-            const currentHour = now.getHours();
-            const currentMinute = now.getMinutes();
-            const currentTime = currentHour + currentMinute / 60;
+            const currentTime = now.getHours() + now.getMinutes() / 60;
 
-            document.querySelectorAll('.lecture-card').forEach(card => {
-                const startTime = parseInt(card.dataset.start);
-                const endTime = parseInt(card.dataset.end);
+            const active = [], upcoming = [], past = [];
 
-                card.classList.remove('active');
+            daySchedule.forEach(period => {
+                const [startHour] = period.time.split(':').map(Number);
+                const endHour = startHour + 2;
 
-                if (currentTime >= startTime && currentTime < endTime) {
-                    card.classList.add('active');
+                if (currentTime >= startHour && currentTime < endHour) {
+                    period.status = 'active';
+                    active.push(period);
+                } else if (currentTime < startHour) {
+                    period.status = 'upcoming';
+                    upcoming.push(period);
+                } else {
+                    period.status = 'past';
+                    past.push(period);
                 }
             });
+
+            return [...active, ...upcoming, ...past];
         }
 
-        // تحديث شريط التقدم
-        function updateProgress() {
-            const now = new Date();
-            const daySchedule = scheduleData[Object.keys(scheduleData)[now.getDay()]];
-            
-            if (!daySchedule || daySchedule.length === 0) {
+        function updateProgress(isOffDay = false) {
+             if (isOffDay) {
                 document.getElementById('progressBar').style.width = '100%';
                 return;
             }
-            
+
+            const now = new Date();
             const startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 8, 0, 0);
             const endOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 18, 0, 0);
             
             const totalMinutes = (endOfDay - startOfDay) / 60000;
             const elapsedMinutes = (now - startOfDay) / 60000;
             let percentage = (elapsedMinutes / totalMinutes) * 100;
-
-            percentage = Math.max(0, Math.min(100, percentage)); // ضمان أن النسبة بين 0 و 100
+            percentage = Math.max(0, Math.min(100, percentage));
             
             document.getElementById('progressBar').style.width = percentage + '%';
         }
 
-        // التشغيل عند التحميل
         window.addEventListener('load', function() {
             generateDaySchedule();
             updateClock();
-            updateProgress();
-
+            
             setInterval(updateClock, 1000);
-            setInterval(highlightActiveCard, 60000);
-            setInterval(updateProgress, 60000);
+            setInterval(generateDaySchedule, 60000); // Re-sort the schedule every minute
         });
     </script>
 </body>
