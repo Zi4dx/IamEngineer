@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الجدول الدراسي الذكي - كلية الهندسة</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+            --primary-color: #3b82f6;
+            --secondary-color: #8b5cf6;
+            --accent-color: #ec4899;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+        }
+
+        body {
+            font-family: 'Cairo', sans-serif;
+            background: var(--bg-gradient);
+            min-height: 100vh;
+            padding: 40px 20px;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* خلفية متحركة */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 50%, rgba(59, 130, 246, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 80% 80%, rgba(168, 85, 247, 0.15) 0%, transparent 50%);
+            pointer-events: none;
+            animation: backgroundShift 20s ease infinite alternate;
+        }
+
+        @keyframes backgroundShift {
+            from { transform: scale(1); }
+            to { transform: scale(1.1); }
+        }
+
+        .container {
+            max-width: 1600px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* الهيدر */
+        .header {
+            text-align: center;
+            margin-bottom: 60px;
+            animation: slideDown 1s ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                transform: translateY(-100px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .main-title {
+            font-size: 4em;
+            font-weight: 900;
+            background: linear-gradient(90deg, #3b82f6, #8b5cf6, #ec4899, #3b82f6);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: gradientFlow 4s linear infinite;
+            margin-bottom: 20px;
+            text-shadow: 0 0 40px rgba(59, 130, 246, 0.3);
+        }
+
+        @keyframes gradientFlow {
+            0% { background-position: 0% center; }
+            100% { background-position: 200% center; }
+        }
+
+        .date-info {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50px;
+            padding: 15px 40px;
+            display: inline-flex;
+            align-items: center;
+            gap: 15px;
+            color: white;
+            font-size: 1.4em;
+            font-weight: 700;
+            animation: glow 2s ease-in-out infinite;
+        }
+
+        @keyframes glow {
+            0%, 100% {
+                box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
+            }
+            50% {
+                box-shadow: 0 0 40px rgba(59, 130, 246, 0.6);
+            }
+        }
+
+        /* الساعة */
+        .clock {
+            position: fixed;
+            top: 30px;
+            left: 30px;
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(20px);
+            padding: 25px 35px;
+            border-radius: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.15);
+            z-index: 100;
+            animation: fadeIn 1s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateX(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .clock-time {
+            font-size: 2.8em;
+            font-weight: 900;
+            color: white;
+            text-align: center;
+            font-variant-numeric: tabular-nums;
+            letter-spacing: 2px;
+        }
+
+        .clock-label {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9em;
+            margin-top: 5px;
+        }
+
+        /* شبكة البطاقات */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 35px;
+            margin-top: 40px;
+            min-height: 400px;
+        }
+
+        /* البطاقة الرئيسية */
+        .lecture-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(30px);
+            border-radius: 30px;
+            padding: 0;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            overflow: hidden;
+            position: relative;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            animation: cardAppear 0.8s ease-out backwards;
+            cursor: pointer;
+        }
+
+        @keyframes cardAppear {
+            from {
+                opacity: 0;
+                transform: translateY(50px) scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .lecture-card:hover {
+            transform: translateY(-15px) scale(1.02);
+            border-color: rgba(59, 130, 246, 0.5);
+            box-shadow: 0 30px 80px rgba(59, 130, 246, 0.4);
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        /* شريط الألوان العلوي */
+        .card-header {
+            height: 8px;
+            background: linear-gradient(90deg, #3b82f6, #8b5cf6, #ec4899, #f59e0b);
+            background-size: 300% 100%;
+            animation: headerGradient 3s linear infinite;
+        }
+
+        @keyframes headerGradient {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 300% 50%; }
+        }
+
+        /* محتوى البطاقة */
+        .card-body {
+            padding: 35px;
+        }
+
+        /* الوقت */
+        .time-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            color: white;
+            padding: 12px 25px;
+            border-radius: 50px;
+            font-size: 1.4em;
+            font-weight: 800;
+            margin-bottom: 25px;
+            box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4);
+        }
+
+        .lecture-card.active .time-badge {
+            background: linear-gradient(135deg, #10b981, #059669);
+            animation: activeShine 1.5s ease-in-out infinite;
+        }
+
+        @keyframes activeShine {
+            0%, 100% {
+                box-shadow: 0 8px 25px rgba(16, 185, 129, 0.4);
+            }
+            50% {
+                box-shadow: 0 8px 40px rgba(16, 185, 129, 0.7);
+            }
+        }
+
+        /* حالة مباشر */
+        .live-indicator {
+            display: none;
+            position: absolute;
+            top: 25px;
+            left: 25px;
+            background: #ef4444;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 50px;
+            font-size: 1em;
+            font-weight: 700;
+            animation: blink 1.5s ease-in-out infinite;
+            z-index: 10;
+        }
+
+        .lecture-card.active .live-indicator {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .live-dot {
+            width: 10px;
+            height: 10px;
+            background: white;
+            border-radius: 50%;
+            animation: pulse 1.5s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+            50% {
+                transform: scale(1.3);
+                opacity: 0.7;
+            }
+        }
+
+        /* المحاضرات داخل البطاقة */
+        .lectures-list {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .lecture-item {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 20px;
+            padding: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .lecture-item::before {
+            content: '';
+            position: absolute;
+            right: 0;
+            top: 0;
+            width: 6px;
+            height: 100%;
+            background: linear-gradient(180deg, #3b82f6, #8b5cf6, #ec4899);
+        }
+
+        .lecture-item:hover {
+            background: rgba(0, 0, 0, 0.3);
+            transform: translateX(-10px);
+            border-color: rgba(59, 130, 246, 0.3);
+        }
+
+        .lecture-name {
+            font-size: 1.8em;
+            font-weight: 800;
+            color: white;
+            margin-bottom: 15px;
+            line-height: 1.4;
+        }
+
+        .lecture-details {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .detail-row {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1.2em;
+            font-weight: 600;
+        }
+
+        .detail-icon {
+            width: 45px;
+            height: 45px;
+            background: rgba(59, 130, 246, 0.2);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4em;
+            flex-shrink: 0;
+        }
+
+        /* شريط التقدم */
+        .progress-container {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 8px;
+            background: rgba(0, 0, 0, 0.3);
+            z-index: 100;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #10b981, #3b82f6, #8b5cf6);
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+
+        /* رسالة عدم وجود محاضرات */
+        #noLecturesMessage {
+            color: white;
+            text-align: center;
+            font-size: 2em;
+            font-weight: 700;
+            padding: 50px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            display: none; /* مخفي بشكل افتراضي */
+        }
+    </style>
+</head>
+<body>
+    <!-- الساعة -->
+    <div class="clock">
+        <div class="clock-time" id="currentTime">00:00:00</div>
+        <div class="clock-label">الوقت الحالي</div>
+    </div>
+
+    <div class="container">
+        <!-- الهيدر -->
+        <div class="header">
+            <h1 class="main-title" id="mainTitle">📚 الجدول الدراسي</h1>
+            <div class="date-info" id="dateInfo">
+                <span>🎓</span>
+                <span>كلية الهندسة | فصل الخريف 2025-2026</span>
+            </div>
+        </div>
+
+        <!-- شبكة البطاقات -->
+        <div class="cards-grid" id="cardsGrid">
+            <!-- البطاقات سيتم إنشاؤها هنا بواسطة JavaScript -->
+        </div>
+        
+        <!-- رسالة لعدم وجود محاضرات -->
+        <div id="noLecturesMessage">
+            🎉 لا توجد محاضرات لهذا اليوم. استمتع بيومك! 🎉
+        </div>
+    </div>
+
+    <!-- شريط التقدم -->
+    <div class="progress-container">
+        <div class="progress-bar" id="progressBar"></div>
+    </div>
+
+    <script>
+        const scheduleData = {
+            saturday: [
+                { time: '8:00 - 10:00', icon: '🕐', classes: [{ name: 'رياضة 1', teacher: 'د. علي فرحات', room: '202' }, { name: 'ديناميكا حرارية 1', teacher: 'أ. فرج الكيلاني', room: '203' }] },
+                { time: '10:00 - 12:00', icon: '🕙', classes: [{ name: 'رياضة 1', teacher: 'د. علي فرحات', room: '202' }, { name: 'ميكانيكا هندسية 1', teacher: 'أ. أيمن الكوت', room: '206' }] },
+                { time: '12:00 - 14:00', icon: '🕛', classes: [{ name: 'إنشاء معماري 1', teacher: 'عبدالله الشكري', room: '207' }, { name: 'صناعات بتروكيميائية', teacher: 'أ. خالد الجفايري', room: '209' }] },
+                { time: '14:00 - 16:00', icon: '🕑', classes: [{ name: 'رسم معماري', teacher: 'علي هويدي', room: '207' }, { name: 'لغة إنجليزية 2', teacher: 'د. محمد البحبوح', room: '209' }] },
+                { time: '16:00 - 18:00', icon: '🕓', classes: [{ name: 'نظريات ومبادئ التخطيط', teacher: 'د. قراض', room: '207' }, { name: 'هندسة بيئة 1', teacher: 'أ. سالم خوجة', room: '209' }] }
+            ],
+            sunday: [
+                { time: '8:00 - 10:00', icon: '🕐', classes: [{ name: 'تاريخ العمارة', teacher: 'د. فضل المولي', room: '202' }, { name: 'إلكترونيات تماثلية', teacher: 'د. سالم الهمالي', room: '206' }] },
+                { time: '10:00 - 12:00', icon: '🕙', classes: [{ name: 'لغة إنجليزية 1', teacher: 'د. محمد البحبوح', room: '202' }, { name: 'تأهيل منشآت', teacher: 'أ. عبدالله غويلة', room: '203' }] },
+                { time: '12:00 - 14:00', icon: '🕛', classes: [{ name: 'تشييد مباني', teacher: 'محمد شكشك', room: '301' }, { name: 'ثقافة وطنية', teacher: 'د. مصطفى الجبو', room: '303' }] },
+                { time: '14:00 - 16:00', icon: '🕑', classes: [{ name: 'لغة عربية', teacher: 'د. محمود ابوحجر', room: '304' }, { name: 'انتقال مادة 2', teacher: 'د. المهدي الحويج', room: '301' }] },
+                { time: '16:00 - 18:00', icon: '🕓', classes: [{ name: 'مواد بناء', teacher: 'علي هويدي', room: '304' }, { name: 'هندسة تفاعلات 2', teacher: 'د. مصطفى الهليب', room: '301' }] }
+            ],
+            monday: [
+                { time: '8:00 - 10:00', icon: '🕐', classes: [{ name: 'برمجة حاسوب', teacher: 'أ. سالم إعبيد', room: '202' }, { name: 'مساحة 2', teacher: 'أ. محمد بن حليم', room: '206' }] },
+                { time: '10:00 - 12:00', icon: '🕙', classes: [{ name: 'تصميم معماري 3', teacher: 'د. قراض', room: '203' }, { name: 'فيزياء معمل', teacher: 'أ. فوزي جوان', room: 'م الفيزياء' }] },
+                { time: '12:00 - 14:00', icon: '🕛', classes: [{ name: 'تخطيط عمراني', teacher: 'د. قراض', room: '203' }, { name: 'فيزياء 2', teacher: 'د. مصطفى ديهوم', room: '205' }] },
+                { time: '14:00 - 16:00', icon: '🕑', classes: [{ name: 'تحكم آلي ميكانيكا', teacher: 'د. عبدالسلام القهواجي', room: '209' }, { name: 'رياضة 4', teacher: 'د. عبدالناصر القعود', room: '302' }] },
+                { time: '16:00 - 18:00', icon: '🕓', classes: [{ name: 'إلكترونيات رقمية', teacher: 'د. سالم الهمالي', room: '202' }, { name: 'مقدمة في الهندسة الطبية الحيوية', teacher: 'أ. محمد ابوسنينة', room: '208' }] }
+            ],
+            tuesday: [
+                { time: '8:00 - 10:00', icon: '🕐', classes: [{ name: 'الظل والمنظور الهندسي', teacher: 'د. يوسف طاهر', room: '202' }, { name: 'كيمياء', teacher: 'أ. صلاح المريمي', room: '208' }] },
+                { time: '10:00 - 12:00', icon: '🕙', classes: [{ name: 'تصميم خرسانة 2', teacher: 'أ. أحمد العيان', room: '207' }, { name: 'لغة عربية', teacher: 'د. محمود ابوحجر', room: '208' }] },
+                { time: '12:00 - 14:00', icon: '🕛', classes: [{ name: 'أحكام الفقه الإسلامي', teacher: 'أ. عمر ابوحجر', room: '207' }, { name: 'رسومات تنفيذية 1', teacher: 'د. فضل المولي', room: '306' }] },
+                { time: '14:00 - 16:00', icon: '🕑', classes: [{ name: 'تأهيل منشآت', teacher: 'أ. عبدالله غويلة', room: '203' }, { name: 'تقنية ورش', teacher: 'أ. مصطفي صوفيا', room: '207' }] },
+                { time: '16:00 - 18:00', icon: '🕓', classes: [{ name: 'مساحة 2', teacher: 'أ. محمد بن حليم', room: '206' }, { name: 'مقدمة هندسة كيميائية 1', teacher: 'أ. فرج الكيلاني', room: '209' }] }
+            ],
+            wednesday: [
+                { time: '8:00 - 10:00', icon: '🕐', classes: [{ name: 'رسم هندسي', teacher: 'د. مصطفى أحمد شكشك', room: '202' }, { name: 'ميكانيكا هندسية 2', teacher: 'د. احمد العيان', room: '206' }] },
+                { time: '10:00 - 12:00', icon: '🕙', classes: [{ name: 'كميات ومواصفات', teacher: 'أ. أحمد العيان', room: '202' }, { name: 'ميكانيكا هندسية 1', teacher: 'أ. أسالم بلعيد', room: '206' }] },
+                { time: '12:00 - 14:00', icon: '🕛', classes: [{ name: 'انتقال مادة 2', teacher: 'د. المهدي الحويج', room: '206' }, { name: 'كيمياء فيزيائية 1', teacher: 'أ. نور الدين كريم', room: '208' }] },
+                { time: '14:00 - 16:00', icon: '🕑', classes: [{ name: 'ادارة الموارد', teacher: 'د. علي شكشك', room: '203' }, { name: 'ثقافة وطنية', teacher: 'د. مصطفى الجبو', room: '306' }] },
+                { time: '16:00 - 18:00', icon: '🕓', classes: [{ name: 'تقنية ورش', teacher: 'أ. مصطفي صوفيا', room: '202' }, { name: 'شبكة أنابيب', teacher: 'أ. عطية بن نجي', room: '307' }] }
+            ],
+            thursday: [
+                { time: '8:00 - 10:00', icon: '🕐', classes: [{ name: 'علم الأحياء العام', teacher: 'أ. عبدالطيف الزروقي', room: '306' }, { name: 'دوائر 2', teacher: 'أ. محمد الشريف', room: '307' }] },
+                { time: '10:00 - 12:00', icon: '🕙', classes: [{ name: 'مقدمة هندسة كيميائية 2', teacher: 'أ. خالد الجفايري', room: '308' }, { name: 'خواص مواد', teacher: 'أ. طارق شميلة', room: '309' }] },
+                { time: '12:00 - 14:00', icon: '🕛', classes: [{ name: 'كيمياء عضوية 2', teacher: 'أ. خالد الجفايري', room: '308' }, { name: 'أنظمة التحكم اللاخطية', teacher: 'د. سعد الغويل', room: '309' }] },
+                { time: '14:00 - 16:00', icon: '🕑', classes: [{ name: 'تصميم خرسانة 3', teacher: 'محمد شكشك', room: '306' }, { name: 'هيدرولوجيا', teacher: 'أ. سالم خوجة', room: '307' }] },
+                { time: '16:00 - 18:00', icon: '🕓', classes: [{ name: 'بحوث العمليات', teacher: 'د. علي شكشك', room: '310' }, { name: 'أنظمة تحكم حاسوبية', teacher: 'د. سعد الغويل', room: '305' }] }
+            ],
+            friday: [] // يوم عطلة
+        };
+
+        // تحديث الساعة
+        function updateClock() {
+            const now = new Date();
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
+            document.getElementById('currentTime').textContent = `${hours}:${minutes}:${seconds}`;
+        }
+
+        // إنشاء بطاقات اليوم
+        function generateDaySchedule() {
+            const now = new Date();
+            const dayNames = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
+            const arabicDayNames = {
+                saturday: 'السبت', sunday: 'الأحد', monday: 'الإثنين',
+                tuesday: 'الثلاثاء', wednesday: 'الأربعاء', thursday: 'الخميس', friday: 'الجمعة'
+            };
+            
+            const todayKey = dayNames[now.getDay()];
+            const todayArabicName = arabicDayNames[todayKey];
+
+            document.getElementById('mainTitle').textContent = `📚 جدول يوم ${todayArabicName}`;
+            
+            const daySchedule = scheduleData[todayKey];
+            const cardsGrid = document.getElementById('cardsGrid');
+            cardsGrid.innerHTML = ''; // إفراغ الشبكة
+
+            if (!daySchedule || daySchedule.length === 0) {
+                document.getElementById('noLecturesMessage').style.display = 'block';
+                return;
+            }
+            
+            document.getElementById('noLecturesMessage').style.display = 'none';
+
+            daySchedule.forEach((period, index) => {
+                const card = document.createElement('div');
+                card.className = 'lecture-card';
+                card.style.animationDelay = `${index * 0.1}s`;
+
+                // استخراج وقت البدء والانتهاء
+                const [startTime] = period.time.split(' - ');
+                const [startHour] = startTime.split(':').map(Number);
+                const endHour = startHour + 2;
+
+                card.dataset.start = startHour;
+                card.dataset.end = endHour;
+
+                let lecturesHTML = '';
+                period.classes.forEach(cls => {
+                    lecturesHTML += `
+                        <div class="lecture-item">
+                            <div class="lecture-name">${cls.name}</div>
+                            <div class="lecture-details">
+                                <div class="detail-row">
+                                    <div class="detail-icon">👨‍🏫</div>
+                                    <span>${cls.teacher}</span>
+                                </div>
+                                <div class="detail-row">
+                                    <div class="detail-icon">📍</div>
+                                    <span>قاعة ${cls.room}</span>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+
+                card.innerHTML = `
+                    <div class="card-header"></div>
+                    <div class="live-indicator"><div class="live-dot"></div><span>مباشر الآن</span></div>
+                    <div class="card-body">
+                        <div class="time-badge">
+                            <span>${period.icon}</span>
+                            <span>${period.time}</span>
+                        </div>
+                        <div class="lectures-list">
+                            ${lecturesHTML}
+                        </div>
+                    </div>
+                `;
+                cardsGrid.appendChild(card);
+            });
+            
+            highlightActiveCard();
+        }
+
+        // تمييز البطاقة النشطة
+        function highlightActiveCard() {
+            const now = new Date();
+            const currentHour = now.getHours();
+            const currentMinute = now.getMinutes();
+            const currentTime = currentHour + currentMinute / 60;
+
+            document.querySelectorAll('.lecture-card').forEach(card => {
+                const startTime = parseInt(card.dataset.start);
+                const endTime = parseInt(card.dataset.end);
+
+                card.classList.remove('active');
+
+                if (currentTime >= startTime && currentTime < endTime) {
+                    card.classList.add('active');
+                }
+            });
+        }
+
+        // تحديث شريط التقدم
+        function updateProgress() {
+            const now = new Date();
+            const daySchedule = scheduleData[Object.keys(scheduleData)[now.getDay()]];
+            
+            if (!daySchedule || daySchedule.length === 0) {
+                document.getElementById('progressBar').style.width = '100%';
+                return;
+            }
+            
+            const startOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 8, 0, 0);
+            const endOfDay = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 18, 0, 0);
+            
+            const totalMinutes = (endOfDay - startOfDay) / 60000;
+            const elapsedMinutes = (now - startOfDay) / 60000;
+            let percentage = (elapsedMinutes / totalMinutes) * 100;
+
+            percentage = Math.max(0, Math.min(100, percentage)); // ضمان أن النسبة بين 0 و 100
+            
+            document.getElementById('progressBar').style.width = percentage + '%';
+        }
+
+        // التشغيل عند التحميل
+        window.addEventListener('load', function() {
+            generateDaySchedule();
+            updateClock();
+            updateProgress();
+
+            setInterval(updateClock, 1000);
+            setInterval(highlightActiveCard, 60000);
+            setInterval(updateProgress, 60000);
+        });
+    </script>
+</body>
+</html>
